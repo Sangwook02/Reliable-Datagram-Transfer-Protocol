@@ -44,6 +44,7 @@ public class Sender {
         }
         this.advWindow = receiver.handShaking(Long.valueOf(properties.getProperty("sender_init_seq_no"))).getW();
         this.isConnected = true;
+        this.receiver = receiver;
         return isConnected;
     }
 
