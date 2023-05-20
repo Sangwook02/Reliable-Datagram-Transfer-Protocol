@@ -1,26 +1,32 @@
 package Sender;
 
+import Channel.Channel;
 import Packet.Ack;
-import Packet.DatagramBuilder;
 import Packet.Segment;
 import Receiver.Receiver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Sender {
-    private static final Sender instance = new Sender();
-    private SenderWindow senderWindow = new SenderWindow();
-    private Integer advWindow;
 
-    private Timer timer;
+    private int advWindow;
+    private int nextSeqNumber = 0;
+    private int lastByteSent = -1;
+    private Timer timer = Timer.getInstance();
+    // necessary to distinguish whether sent or not
+    private List<Segment> segments = new ArrayList<>();
+
+    /*
+    connection Setup을 위한 receiver와 isConnected.
+     */
     private Receiver receiver;
     private boolean isConnected = false;
+    private static final Sender instance = new Sender();
+    private SenderBuffer senderBuffer = new SenderBuffer();
     private SegmentBuilder segmentBuilder = SegmentBuilder.getInstance();
-    private int nextSeqNumber;
-
-    private DatagramBuilder datagramBuilder = DatagramBuilder.getInstance();
+    private Channel channel = Channel.getInstance();
 
     private Sender() {
     }
@@ -28,12 +34,14 @@ public class Sender {
     public static Sender getInstance() {
         return instance;
     }
-    public void getData(String data) {
-        Segment segment = segmentBuilder.makeSegment(data);
-        senderWindow.insert(segment);
+
+    public boolean getData(int data) {
+        System.out.println(data+" 크기의 데이터를 window에 삽입합니다.");
+        // TODO: sender window에 여유 공간이 없으면 어떻게 하지?
+        return senderBuffer.insert(data);
     }
     // TODO: handShaking 과정에서 오고 갈 정보 설정하기
-    public boolean connectionSetup(Receiver receiver) {
+    public void connectionSetup(Receiver receiver) {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
@@ -44,13 +52,13 @@ public class Sender {
         }
         this.advWindow = receiver.handShaking(Long.valueOf(properties.getProperty("sender_init_seq_no"))).getW();
         this.isConnected = true;
-        return isConnected;
+        this.receiver = receiver;
     }
 
-    public boolean connectionClose() {
+    public String  connectionClose() {
         boolean isConnected =  receiver.close();
         receiver = null;
-        return isConnected;
+        return "close";
     }
 
     public void acked(Ack ack) {
