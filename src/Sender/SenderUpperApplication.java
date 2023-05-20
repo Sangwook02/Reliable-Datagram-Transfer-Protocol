@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class SenderUpperApplication {
-    private  static final SenderUpperApplication instance = new SenderUpperApplication();
+    private static final SenderUpperApplication instance = new SenderUpperApplication();
 
     public static SenderUpperApplication getInstance() {
         return instance;
