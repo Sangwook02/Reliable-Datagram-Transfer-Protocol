@@ -79,7 +79,7 @@ public class Sender {
             }
         }
     }
-    public void write() {
+    public void write() throws InterruptedException {
         for (Segment segment:segments) {
             // break if advWindow's spare space is smaller than segment's length
             if (segment.getLength() > advWindow) {
