@@ -13,8 +13,8 @@ public class SegmentBuilder {
         return instance;
     }
 
-    public Segment makeSegment(String data) {
-        Segment segment = new Segment(data);
+    public Segment makeSegment(int data, Long sequenceNumber) {
+        Segment segment = new Segment(data, sequenceNumber);
         return segment;
     }
 }
