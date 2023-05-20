@@ -35,14 +35,6 @@ public class Segment {
         return sequenceNumber;
     }
 
-    public int getSrcPortNumber() {
-        return srcPortNumber;
-    }
-
-    public int getDestPortNumber() {
-        return destPortNumber;
-    }
-
     public int getLength() {
         return length;
     }
