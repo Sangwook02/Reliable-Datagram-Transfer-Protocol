@@ -79,7 +79,7 @@ public class Sender {
             }
         }
     }
-    public void write() {
+    public void write() throws InterruptedException {
         for (Segment segment:segments) {
             // break if advWindow's spare space is smaller than segment's length
             if (segment.getLength() > advWindow) {
@@ -119,7 +119,7 @@ public class Sender {
     }
     // TODO: selective-N이므로 List로 받아와서 처리하는게 맞음.
     // TODO: get rid of List<WindowElement> and use List<Segment> from SenderWindow.
-    public void writeProcess() {
+    public void writeProcess() throws InterruptedException {
         /*
         STEP1: List<WindowElement>에서 아직 보내지지 않은, segments에 없는 element를 Segment로 만들어 segments에 추가.
         STEP2: segments의 segment들을 하나씩 보내고 timer 가동.
