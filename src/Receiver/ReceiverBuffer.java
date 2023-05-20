@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ReceiverWindow {
+public class ReceiverBuffer {
     private int windowSize;
     private int rcvBase;
     private int lastByteRcvd;
 
-    public ReceiverWindow() {
+    public ReceiverBuffer() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
