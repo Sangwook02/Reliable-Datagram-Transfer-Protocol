@@ -126,33 +126,6 @@ public class Sender {
          */
         updateSegmentList();
         write();
-//        List<WindowElement> elementToWrite = senderWindow.bringUnwrittenData();
-//        for (WindowElement obj:elementToWrite) {
-//            if (lastByteSent < obj.getSequenceNumber()) {
-//                // 아직 한번도 보내지 않은 element
-//                // TODO: nextSeqNumber 설정이 잘못됨.
-//                this.nextSeqNumber += obj.getLength();
-//                this.advWindow -= obj.getLength();
-//                this.lastByteSent = nextSeqNumber;
-//                if (!timer.isRunning()) { // if timer is not running.
-//                    timer.setTimer(nextSeqNumber);
-//                    channel.input(segment);
-//                    System.out.println(1);
-//                }
-//                else {
-//                    channel.input(segment);
-//                    System.out.println(2);
-//                }
-//            }
-//            else {
-//                // 이미 보낸 적이 있는 element
-//                if (!timer.isRunning()) {
-//                    timer.setTimer(Math.toIntExact(obj.getSequenceNumber()));
-//                    // TODO: handle the parameter error right below this comment.
-//                    //channel.input(segment);
-//                    System.out.println(3);
-//                }
-//            }
 //        }
     }
 
