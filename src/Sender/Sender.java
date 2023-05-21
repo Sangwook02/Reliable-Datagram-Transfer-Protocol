@@ -100,7 +100,8 @@ public class Sender {
                     this.lastByteSent += segment.getLength();
                     System.out.println("lastByteSent = " + lastByteSent);
                     this.advWindow -= segment.getLength();
-                    channel.senderToReceiver(segment);
+                    System.out.println("receiver1234 = " + receiver);
+                    channel.senderToReceiver(this, receiver, segment);
                 }
                 else {
                     // 이미 다른 segment의 타이머가 작동중인 상황, 한번도 안 보내진 segment를 보냄.
@@ -109,7 +110,7 @@ public class Sender {
                     this.lastByteSent += segment.getLength();
                     System.out.println("lastByteSent = " + lastByteSent);
                     this.advWindow -= segment.getLength();
-                    channel.senderToReceiver(segment);
+                    channel.senderToReceiver(this, receiver, segment);
                 }
             }
             // sent but not acked.
