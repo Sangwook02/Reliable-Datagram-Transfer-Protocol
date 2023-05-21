@@ -6,6 +6,14 @@ public class Ack {
     // receiver's window의 여유 공간
     private int w;
 
+    public int getY() {
+        return y;
+    }
+
+    public int getW() {
+        return w;
+    }
+
     public Ack(int y, int w) {
         this.y = y;
         this.w = w;

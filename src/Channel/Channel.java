@@ -1,6 +1,9 @@
 package Channel;
 
+import Packet.Ack;
 import Packet.Segment;
+import Receiver.Receiver;
+import Sender.Sender;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +33,8 @@ public class Channel {
     public static Channel getInstance() {
         return instance;
     }
+    private Sender sender = Sender.getInstance();
+    private Receiver receiver = Receiver.getInstance();
 
     private Channel() throws FileNotFoundException {
         init();
@@ -79,7 +84,7 @@ public class Channel {
         operations.offer(operation);
         operationCounts.offer(operationCount);
     }
-    public void input(Segment segment) throws InterruptedException {
+    public void senderToReceiver(Segment segment) throws InterruptedException {
         System.out.println("channel이 받은 segment의 길이는 " + segment.getLength());
         System.out.println("");
         received.add(segment.getLength());
@@ -93,15 +98,39 @@ public class Channel {
         if (operation == 'N') {
             System.out.println("NoError");
             Thread.sleep((long) (latency*1000));
-            // TODO: pass segment to Receiver
+            receiver.receive(segment);
         } else if (operation == 'L') {
             System.out.println("Loss");
         } else if (operation == 'c') {
             System.out.println("smallCongestion");
             Thread.sleep((long) (latency*1000 + smallCongestion*1000));
+            receiver.receive(segment);
         } else if (operation == 'C') {
             System.out.println("bigCongestion");
             Thread.sleep((long) (latency*1000 + bigCongestion*1000));
+            receiver.receive(segment);
+        } else {
+            System.out.println("something went wrong");
+        }
+    }
+    public void receiverToSender(Ack ack) throws InterruptedException {
+        getOperation();
+        System.out.println(operation);
+        System.out.println(operationCount);
+        if (operation == 'N') {
+            System.out.println("NoError");
+            Thread.sleep((long) (latency*1000));
+            sender.acked(ack);
+        } else if (operation == 'L') {
+            System.out.println("Loss");
+        } else if (operation == 'c') {
+            System.out.println("smallCongestion");
+            Thread.sleep((long) (latency*1000 + smallCongestion*1000));
+            sender.acked(ack);
+        } else if (operation == 'C') {
+            System.out.println("bigCongestion");
+            Thread.sleep((long) (latency*1000 + bigCongestion*1000));
+            sender.acked(ack);
         } else {
             System.out.println("something went wrong");
         }

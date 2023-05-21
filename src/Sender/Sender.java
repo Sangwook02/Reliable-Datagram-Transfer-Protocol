@@ -41,7 +41,7 @@ public class Sender {
         return senderBuffer.insert(data);
     }
     // TODO: handShaking 과정에서 오고 갈 정보 설정하기
-    public void connectionSetup(Receiver receiver) {
+    public void connectionSetup(Receiver receiver) throws FileNotFoundException {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
@@ -99,7 +99,7 @@ public class Sender {
                     this.lastByteSent += segment.getLength();
                     System.out.println("lastByteSent = " + lastByteSent);
                     this.advWindow -= segment.getLength();
-                    channel.input(segment);
+                    channel.senderToReceiver(segment);
                 }
                 else {
                     // 이미 다른 segment의 타이머가 작동중인 상황, 한번도 안 보내진 segment를 보냄.
@@ -108,7 +108,7 @@ public class Sender {
                     this.lastByteSent += segment.getLength();
                     System.out.println("lastByteSent = " + lastByteSent);
                     this.advWindow -= segment.getLength();
-                    channel.input(segment);
+                    channel.senderToReceiver(segment);
                 }
             }
             // sent but not acked.
