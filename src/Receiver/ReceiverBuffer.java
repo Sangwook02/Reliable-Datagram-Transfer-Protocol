@@ -4,16 +4,20 @@ import Packet.Segment;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 public class ReceiverBuffer {
     private int windowSize;
     private int rcvBase;
     private int lastByteRcvd;
-    private ArrayList<Segment> window;
+    private Deque<Segment> window;
+    private static final ReceiverBuffer instance= new ReceiverBuffer();
 
-    public ReceiverBuffer() {
+    public static ReceiverBuffer getInstance() {
+        return instance;
+    }
+
+    private ReceiverBuffer() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
@@ -25,7 +29,7 @@ public class ReceiverBuffer {
         this.windowSize = Integer.parseInt(properties.getProperty("receiver_window_size"));
         this.rcvBase = 0;
         this.lastByteRcvd = 0;
-        this.window = new ArrayList<Segment>(windowSize);
+        this.window = new LinkedList<Segment>();
     }
 
     public int getWindowSize() {
@@ -36,7 +40,7 @@ public class ReceiverBuffer {
         return rcvBase;
     }
 
-    public ArrayList<Segment> getWindow() {
+    public Deque<Segment> getWindow() {
         return window;
     }
 
@@ -47,6 +51,6 @@ public class ReceiverBuffer {
         else {
             System.out.println("segment is already in window");
         }
-       }
+    }
     // TODO: upper layer에서 data 읽어가는 경우의 작동
 }
