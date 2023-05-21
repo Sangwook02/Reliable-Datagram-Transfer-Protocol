@@ -62,4 +62,7 @@ public class SenderBuffer {
     }
 
     // TODO: Ack 받았을 때의 작동, sliding 등
+    public void sliding(int y) {
+
+    }
 }

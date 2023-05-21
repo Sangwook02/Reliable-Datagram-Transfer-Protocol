@@ -1,14 +1,17 @@
 package Receiver;
 
+import Channel.Channel;
 import Packet.Ack;
 import Packet.Segment;
-import Sender.SegmentBuilder;
+import Sender.Sender;
 
 import java.io.FileNotFoundException;
 
 public class Receiver {
     private int lastByteRcvd;
     private static final Receiver instance;
+    private Channel channel;
+
 
     private ReceiverUpperApplication receiverUpperApplication = ReceiverUpperApplication.getInstance();
 
@@ -21,6 +24,10 @@ public class Receiver {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     public static Receiver getInstance() {
@@ -37,6 +44,7 @@ public class Receiver {
     public Ack handShaking(Long initialSequenceNumber) throws FileNotFoundException {
         String returnMessage = "Connection has made. Initial sequence number is " + initialSequenceNumber;
         System.out.println(returnMessage);
+        System.out.println("");
         receiverUpperApplication.readScenarioFile();
         receiverUpperApplication.setConnection(true);
         Thread receiverRead = new Thread() {
@@ -59,19 +67,18 @@ public class Receiver {
         return false;
     }
 
-    public void receive(Segment segment) {
-        System.out.println("=====receiver====");
-        System.out.println("lastByteRcvd = " + lastByteRcvd);
-        System.out.println("segment의 seqNo = " + segment.getSequenceNumber());
+    public void receive(Sender sender, Segment segment) throws InterruptedException {
         System.out.println("");
         if (lastByteRcvd + 1 == segment.getSequenceNumber()) {
             this.lastByteRcvd += segment.getLength();
             receiverBuffer.insert(segment);
             Ack ack = new Ack((int) (segment.getSequenceNumber()+segment.getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
+            channel.receiverToSender(ack, sender);
         }
         else {
             System.out.println("cannot receive because it is not in-order");
             Ack ack = new Ack((int) (receiverBuffer.getWindow().getLast().getSequenceNumber()+ receiverBuffer.getWindow().getLast().getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
+            channel.receiverToSender(ack,sender);
         }
     }
 }
