@@ -62,6 +62,8 @@ public class Sender {
 
     public void acked(Ack ack) {
         this.advWindow = ack.getW();
+        int y = ack.getY();
+        senderBuffer.sliding(y);
         // TODO: y에 대한 처리
     }
 
