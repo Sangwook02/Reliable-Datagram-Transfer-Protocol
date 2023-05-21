@@ -16,6 +16,7 @@ public class Control {
         Thread senderWrite = new Thread() {
             @Override
             public void run() {
+                receiver.setChannel(channel);
                 while(true){
                     if (sender.getReceiver() != null){
                         try {
@@ -34,7 +35,6 @@ public class Control {
                 }
             }
         };
-
         // start to periodically write data in window.
         senderWrite.start();
         // setup connection and start passing the data from scenario file to window.
