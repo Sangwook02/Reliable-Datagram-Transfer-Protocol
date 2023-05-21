@@ -2,9 +2,7 @@ package Sender;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class SenderBuffer {
     private int windowSize;
@@ -12,7 +10,7 @@ public class SenderBuffer {
     private int sendBase;
     private int lastByteAcked;
     // TODO: Segment가 아니라 int로 바꿔야 함.
-    private ArrayList<WindowElement> window;
+    private Deque<WindowElement> window;
 
     public SenderBuffer() {
         String resource = "config/RDTP.properties";
@@ -27,7 +25,7 @@ public class SenderBuffer {
         this.lastByteWritten = -1;
         this.sendBase = 0;
         this.lastByteAcked = 0;
-        this.window = new ArrayList<WindowElement>(windowSize);
+        this.window = new LinkedList<WindowElement>();
     }
     // Sender side의 window에 segment 삽입
     public boolean insert(int data) {
