@@ -37,10 +37,9 @@ public class Sender {
 
     public boolean getData(int data) {
         System.out.println(data+" 크기의 데이터를 window에 삽입합니다.");
-        // TODO: sender window에 여유 공간이 없으면 어떻게 하지?
         return senderBuffer.insert(data);
     }
-    // TODO: handShaking 과정에서 오고 갈 정보 설정하기
+
     public void connectionSetup(Receiver receiver) throws FileNotFoundException {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -117,8 +116,7 @@ public class Sender {
             }
         }
     }
-    // TODO: selective-N이므로 List로 받아와서 처리하는게 맞음.
-    // TODO: get rid of List<WindowElement> and use List<Segment> from SenderWindow.
+
     public void writeProcess() throws InterruptedException {
         /*
         STEP1: List<WindowElement>에서 아직 보내지지 않은, segments에 없는 element를 Segment로 만들어 segments에 추가.
@@ -126,33 +124,6 @@ public class Sender {
          */
         updateSegmentList();
         write();
-//        List<WindowElement> elementToWrite = senderWindow.bringUnwrittenData();
-//        for (WindowElement obj:elementToWrite) {
-//            if (lastByteSent < obj.getSequenceNumber()) {
-//                // 아직 한번도 보내지 않은 element
-//                // TODO: nextSeqNumber 설정이 잘못됨.
-//                this.nextSeqNumber += obj.getLength();
-//                this.advWindow -= obj.getLength();
-//                this.lastByteSent = nextSeqNumber;
-//                if (!timer.isRunning()) { // if timer is not running.
-//                    timer.setTimer(nextSeqNumber);
-//                    channel.input(segment);
-//                    System.out.println(1);
-//                }
-//                else {
-//                    channel.input(segment);
-//                    System.out.println(2);
-//                }
-//            }
-//            else {
-//                // 이미 보낸 적이 있는 element
-//                if (!timer.isRunning()) {
-//                    timer.setTimer(Math.toIntExact(obj.getSequenceNumber()));
-//                    // TODO: handle the parameter error right below this comment.
-//                    //channel.input(segment);
-//                    System.out.println(3);
-//                }
-//            }
 //        }
     }
 

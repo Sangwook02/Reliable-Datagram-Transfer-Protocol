@@ -76,7 +76,7 @@ public class ReceiverUpperApplication {
         System.out.println("receiverBuffer = " + receiverBuffer.getWindow());
     }
 
-    public void read() throws InterruptedException {// TODO: true일 때가 아니라 thread로 실행해야 함. window가 계속 비어있음.
+    public void read() throws InterruptedException {
         while (connection) {
             double idleTime = idleList.remove();
             idleList.offer(idleTime);
