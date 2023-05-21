@@ -52,5 +52,4 @@ public class ReceiverBuffer {
             System.out.println("segment is already in window");
         }
     }
-    // TODO: upper layer에서 data 읽어가는 경우의 작동
 }
