@@ -33,8 +33,6 @@ public class Channel {
     public static Channel getInstance() {
         return instance;
     }
-    private Sender sender = Sender.getInstance();
-    private Receiver receiver = Receiver.getInstance();
 
     private Channel() throws FileNotFoundException {
         init();
@@ -84,11 +82,8 @@ public class Channel {
         operations.offer(operation);
         operationCounts.offer(operationCount);
     }
-    public void senderToReceiver(Segment segment) throws InterruptedException {
-        System.out.println("channel이 받은 segment의 길이는 " + segment.getLength());
-        System.out.println("");
+    public void senderToReceiver(Sender sender, Receiver receiver,Segment segment) throws InterruptedException {
         received.add(segment.getLength());
-        System.out.println("received = " + received);
 
         // get operation to execute
         getOperation();
@@ -98,25 +93,23 @@ public class Channel {
         if (operation == 'N') {
             System.out.println("NoError");
             Thread.sleep((long) (latency*1000));
-            receiver.receive(segment);
+            receiver.receive(sender, segment);
         } else if (operation == 'L') {
             System.out.println("Loss");
         } else if (operation == 'c') {
             System.out.println("smallCongestion");
             Thread.sleep((long) (latency*1000 + smallCongestion*1000));
-            receiver.receive(segment);
+            receiver.receive(sender, segment);
         } else if (operation == 'C') {
             System.out.println("bigCongestion");
             Thread.sleep((long) (latency*1000 + bigCongestion*1000));
-            receiver.receive(segment);
+            receiver.receive(sender, segment);
         } else {
             System.out.println("something went wrong");
         }
     }
-    public void receiverToSender(Ack ack) throws InterruptedException {
+    public void receiverToSender(Ack ack, Sender sender) throws InterruptedException {
         getOperation();
-        System.out.println(operation);
-        System.out.println(operationCount);
         if (operation == 'N') {
             System.out.println("NoError");
             Thread.sleep((long) (latency*1000));
