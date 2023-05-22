@@ -76,13 +76,13 @@ public class ReceiverUpperApplication {
         System.out.println("receiverBuffer = " + receiverBuffer.getWindow());
     }
 
-    public void read() throws InterruptedException {
+    public void read(Receiver receiver) throws InterruptedException {
         while (connection) {
             double idleTime = idleList.remove();
             idleList.offer(idleTime);
             Thread.sleep((long) idleTime);
             if (receiverBuffer.getWindow().size() != 0) {
-                windowToApplication(receiverBuffer.getWindow());
+                windowToApplication(receiverBuffer.getWindow(), receiver);
             }
         }
         System.out.println("connection = " + connection);

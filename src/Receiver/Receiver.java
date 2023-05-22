@@ -51,7 +51,7 @@ public class Receiver {
             @Override
             public void run() {
                 try {
-                    receiverUpperApplication.read();
+                    receiverUpperApplication.read(Receiver.this);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
