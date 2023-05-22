@@ -67,16 +67,23 @@ public class SenderBuffer {
     }
 
     // TODO: Ack 받았을 때의 작동, sliding 등
+    public void updateAck(int y) {
+        ArrayList<WindowElement> copy = new ArrayList<>();
+        for (WindowElement e: window) {
+            copy.add(e);
+        }
+        Iterator<WindowElement> iterator = copy.iterator();
+        while(iterator.hasNext()) {
+            WindowElement element = iterator.next();
+            if (element.getSequenceNumber() != null && element.getSequenceNumber() < y) {
+                element.setAcked(true);
+                sendBase += element.getLength();
+            } else {
+              break;
+            }
+        }
+    }
     public void sliding(int y) {
-//        while (window != null) {
-//            System.out.println("window1 = " + window);
-//            System.out.println("window.getFirst() = " + window.getFirst());
-//            System.out.println("window.getFirst().getSequenceNumber() = " + window.getFirst().getSequenceNumber());
-//            // TODO: 두번째 element의 seqNo가 null임.
-//            if (window.getFirst().getSequenceNumber() < y) {
-//                window.remove();
-//            }
-//            System.out.println("window2 = " + window);
-//        }
+         updateAck(y);
     }
 }

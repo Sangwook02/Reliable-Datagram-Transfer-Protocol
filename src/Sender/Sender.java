@@ -15,8 +15,6 @@ public class Sender {
     private int nextSeqNumber = 0;
     private int lastByteSent = -1;
     private Timer timer = Timer.getInstance();
-    // necessary to distinguish whether sent or not
-    private List<Segment> segments = new ArrayList<>();
 
     /*
     connection Setup을 위한 receiver와 isConnected.
@@ -54,6 +52,9 @@ public class Sender {
         this.receiver = receiver;
     }
 
+    public Receiver getReceiver() {
+        return receiver;
+    }
     public String  connectionClose() {
         boolean isConnected =  receiver.close();
         receiver = null;
@@ -64,7 +65,11 @@ public class Sender {
         this.advWindow = ack.getW();
         int y = ack.getY();
         senderBuffer.sliding(y);
-        // TODO: y에 대한 처리
+        if (lastByteSent > y) {
+            timer.updateTimer(y, senderBuffer.getWindow());
+        } else if (lastByteSent < y){
+            timer.resetRunning();
+        }
     }
     public void writeProcess() throws InterruptedException {
         /*
@@ -111,7 +116,4 @@ public class Sender {
         }
     }
 
-    public Receiver getReceiver() {
-        return receiver;
-    }
 }
