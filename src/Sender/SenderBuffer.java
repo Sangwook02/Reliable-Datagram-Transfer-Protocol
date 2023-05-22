@@ -10,7 +10,7 @@ public class SenderBuffer {
     private int sendBase;
     private int lastByteAcked;
     // TODO: Segment가 아니라 int로 바꿔야 함.
-    private Deque<WindowElement> window;
+    private ArrayList<WindowElement> window = new ArrayList<WindowElement>();
 
     public SenderBuffer() {
         String resource = "config/RDTP.properties";
@@ -25,7 +25,6 @@ public class SenderBuffer {
         this.lastByteWritten = -1;
         this.sendBase = 0;
         this.lastByteAcked = 0;
-        this.window = new LinkedList<WindowElement>();
     }
     // Sender side의 window에 segment 삽입
     public boolean insert(int data) {
@@ -59,8 +58,25 @@ public class SenderBuffer {
         return unwrittenData;
     }
 
+    public int getSendBase() {
+        return sendBase;
+    }
+
+    public ArrayList<WindowElement> getWindow() {
+        return window;
+    }
+
     // TODO: Ack 받았을 때의 작동, sliding 등
     public void sliding(int y) {
-
+//        while (window != null) {
+//            System.out.println("window1 = " + window);
+//            System.out.println("window.getFirst() = " + window.getFirst());
+//            System.out.println("window.getFirst().getSequenceNumber() = " + window.getFirst().getSequenceNumber());
+//            // TODO: 두번째 element의 seqNo가 null임.
+//            if (window.getFirst().getSequenceNumber() < y) {
+//                window.remove();
+//            }
+//            System.out.println("window2 = " + window);
+//        }
     }
 }

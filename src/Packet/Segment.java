@@ -10,7 +10,6 @@ public class Segment {
     private int destPortNumber;
     private int length;
     private Long sequenceNumber;
-    private LocalDateTime timeSent;
 
     public Segment(int dataLength, Long sequenceNumber) {
         String resource = "config/RDTP.properties";
@@ -37,13 +36,5 @@ public class Segment {
 
     public int getLength() {
         return length;
-    }
-
-    public LocalDateTime getTimeSent() {
-        return timeSent;
-    }
-
-    public void setTimeSent(LocalDateTime timeSent) {
-        this.timeSent = timeSent;
     }
 }
