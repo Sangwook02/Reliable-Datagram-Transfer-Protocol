@@ -66,68 +66,49 @@ public class Sender {
         senderBuffer.sliding(y);
         // TODO: y에 대한 처리
     }
-
-    public void updateSegmentList() {
-        List<WindowElement> elementToWrite = senderBuffer.bringUnAckedData();
-        for(WindowElement obj:elementToWrite) {
-            // segment가 생성되지 않은 windowElement라면 Segment로 만들어 segments 리스트에 추가.
-            if(!obj.isSegmentCreated()) {
-                obj.setSequenceNumber((long) nextSeqNumber);
-                this.nextSeqNumber += obj.getLength();
-                Segment segment = segmentBuilder.makeSegment(obj.getLength(),obj.getSequenceNumber());
-                obj.setSegmentCreated(true);
-                segments.add(segment);
-            }
-        }
-    }
-    public void write() throws InterruptedException {
-        for (Segment segment:segments) {
-            // break if advWindow's spare space is smaller than segment's length
-            if (segment.getLength() > advWindow) {
-                break;
-            }
-            // not sent yet.
-            if (lastByteSent <  segment.getSequenceNumber() && segment.getTimeSent() == null) {
-                if (!timer.isRunning()){
-                    // set timer and update timeSent field of segment.
-                    LocalDateTime now = LocalDateTime.now();
-                    timer.setTimer(Math.toIntExact(segment.getSequenceNumber()), now);
-                    segment.setTimeSent(now);
-                    // TODO: delete debug purpose prt.
-                    System.out.println(segment+"를 전송합니다.");
-                    System.out.println("");
-                    // lastByteSent, advWindow와 channel.input()은 세트
-                    this.lastByteSent += segment.getLength();
-                    System.out.println("lastByteSent = " + lastByteSent);
-                    this.advWindow -= segment.getLength();
-                    System.out.println("receiver1234 = " + receiver);
-                    channel.senderToReceiver(this, receiver, segment);
-                }
-                else {
-                    // 이미 다른 segment의 타이머가 작동중인 상황, 한번도 안 보내진 segment를 보냄.
-                    System.out.println("타이머가 이미 설정되어 있지만, 새로운 segment를 보냅니다.");
-                    segment.setTimeSent(LocalDateTime.now());
-                    this.lastByteSent += segment.getLength();
-                    System.out.println("lastByteSent = " + lastByteSent);
-                    this.advWindow -= segment.getLength();
-                    channel.senderToReceiver(this, receiver, segment);
-                }
-            }
-            // sent but not acked.
-            else {
-                // 타임아웃된 것들 처리.
-            }
-        }
-    }
-
     public void writeProcess() throws InterruptedException {
         /*
         STEP1: List<WindowElement>에서 아직 보내지지 않은, segments에 없는 element를 Segment로 만들어 segments에 추가.
         STEP2: segments의 segment들을 하나씩 보내고 timer 가동.
          */
-        updateSegmentList();
-        write();
-//        }
+        // only when window is not null
+        if (senderBuffer.getWindow().size() != 0) {
+            ArrayList<WindowElement> copy = new ArrayList<>();
+            for (WindowElement e: senderBuffer.getWindow()) {
+                copy.add(e);
+            }
+            Iterator<WindowElement> iterator = copy.iterator();
+            while (iterator.hasNext()){
+                WindowElement element = iterator.next();
+                if (element.getSequenceNumber() == null) {
+                    element.setSequenceNumber((long) nextSeqNumber);
+                    nextSeqNumber += element.getLength();
+                    if (!timer.isRunning()) {
+                        LocalDateTime now = LocalDateTime.now();
+                        timer.setTimer(Math.toIntExact(element.getSequenceNumber()), now);
+                        element.setTimeSent(now);
+                        this.lastByteSent += element.getLength();
+                        this.advWindow -= element.getLength();
+                        Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                        channel.senderToReceiver(this, receiver, segment);
+                    }
+                    else {
+                        // timer is running but this element is never sent.
+                        element.setTimeSent(LocalDateTime.now());
+                        this.lastByteSent += element.getLength();
+                        System.out.println("lastByteSent = " + lastByteSent);
+                        this.advWindow -= element.getLength();
+                        Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                        channel.senderToReceiver(this, receiver, segment);
+                    }
+
+                } else {
+                    if (senderBuffer.getSendBase() <= element.getSequenceNumber()) {
+                        // already sent but not acked yet.
+                    }
+                }
+            }
+        }
     }
 
     public Receiver getReceiver() {
