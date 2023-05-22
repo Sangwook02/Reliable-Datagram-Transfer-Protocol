@@ -88,6 +88,7 @@ public class ReceiverUpperApplication {
         while (connection) {
             double idleTime = idleList.remove();
             idleList.offer(idleTime);
+            idleTime *= 1000;
             Thread.sleep((long) idleTime);
             if (receiverBuffer.getWindow().size() != 0) {
                 windowToApplication(receiverBuffer.getWindow(), receiver);
