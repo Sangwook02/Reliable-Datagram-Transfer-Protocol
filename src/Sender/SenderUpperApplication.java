@@ -34,14 +34,15 @@ public class SenderUpperApplication {
                 while (!sender.getData(read1)){
                     System.out.println("sender window does not have enough space");
                 }
-                int read2 = Integer.parseInt(scanner.next());
-
+                double read2 = Double.parseDouble(scanner.next());
+                read2 *= 1000;
+                System.out.println("read22 = " + read2);
                 // Thread sleep for idle
                 System.out.print("idling for ");
                 System.out.print(read2);
                 System.out.println(" second(s)");
                 System.out.println("");
-                Thread.sleep(read2*1000);
+                Thread.sleep((long) read2);
             } catch (Exception e) {
                 System.out.println("endOfFIle");
                 System.out.println("연결 종료합니다.");
