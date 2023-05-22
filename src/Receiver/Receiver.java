@@ -68,7 +68,7 @@ public class Receiver {
     }
 
     public void receive(Sender sender, Segment segment) throws InterruptedException {
-        System.out.println("");
+        System.out.println("receiverBuffer.getWindow() = " + receiverBuffer.getWindow());
         if (lastByteRcvd + 1 == segment.getSequenceNumber()) {
             this.lastByteRcvd += segment.getLength();
             receiverBuffer.insert(segment);
@@ -77,7 +77,7 @@ public class Receiver {
         }
         else {
             System.out.println("cannot receive because it is not in-order");
-            Ack ack = new Ack((int) (receiverBuffer.getWindow().getLast().getSequenceNumber()+ receiverBuffer.getWindow().getLast().getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
+            Ack ack = new Ack((int) (receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getSequenceNumber()+ receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
             channel.receiverToSender(ack,sender);
         }
     }
