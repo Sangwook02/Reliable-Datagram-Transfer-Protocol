@@ -3,10 +3,11 @@ package Sender;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class Timer {
-    private int sequenceNumber;
+    private Integer sequenceNumber;
     private LocalDateTime expireAt;
     private int timeoutValue;
     private boolean isRunning;
@@ -34,13 +35,31 @@ public class Timer {
         return false;
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void resetRunning() {
+        this.sequenceNumber = null;
+        this.isRunning = false;
+        this.expireAt = null;
     }
 
     public void setTimer(int sequenceNumber, LocalDateTime startAt){
         this.sequenceNumber = sequenceNumber;
         this.isRunning = true;
         this.expireAt = startAt.plusSeconds(timeoutValue);
+    }
+    public void updateTimer(int y, ArrayList<WindowElement> windowElements) {
+        WindowElement timerElement = null;
+        for(WindowElement element:windowElements) {
+            if (element.getSequenceNumber() == y) {
+                timerElement = element;
+                break;
+            }
+        }
+        this.sequenceNumber = Math.toIntExact(timerElement.getSequenceNumber());
+        this.isRunning = true;
+        this.expireAt = timerElement.getTimeSent().plusSeconds(timeoutValue);
     }
 }
