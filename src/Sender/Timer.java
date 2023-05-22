@@ -28,15 +28,10 @@ public class Timer {
     }
 
     public boolean isRunning() {
-        System.out.println("expireAt = " + expireAt);
-        if(isRunning) { // 만료 여부
+        if(isRunning) {
             return LocalDateTime.now().isAfter(expireAt);
         }
         return false;
-    }
-
-    public int getSequenceNumber() {
-        return sequenceNumber;
     }
 
     public void resetRunning() {
@@ -45,6 +40,9 @@ public class Timer {
         this.expireAt = null;
     }
 
+    public LocalDateTime getExpireAt() {
+        return expireAt;
+    }
     public void setTimer(int sequenceNumber, LocalDateTime startAt){
         this.sequenceNumber = sequenceNumber;
         this.isRunning = true;
@@ -62,4 +60,5 @@ public class Timer {
         this.isRunning = true;
         this.expireAt = timerElement.getTimeSent().plusSeconds(timeoutValue);
     }
+
 }

@@ -12,7 +12,7 @@ public class Control {
     private static final Channel channel = Channel.getInstance();
 
 
-    public void run() throws FileNotFoundException, InterruptedException {
+    public void run() throws FileNotFoundException {
         Thread senderWrite = new Thread() {
             @Override
             public void run() {
@@ -20,6 +20,7 @@ public class Control {
                 while(true){
                     if (sender.getReceiver() != null){
                         try {
+                            sender.checkTimeOut();
                             sender.writeProcess();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);

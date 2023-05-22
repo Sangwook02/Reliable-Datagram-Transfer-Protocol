@@ -106,14 +106,29 @@ public class Sender {
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
                         channel.senderToReceiver(this, receiver, segment);
                     }
-
-                } else {
-                    if (senderBuffer.getSendBase() <= element.getSequenceNumber()) {
-                        // already sent but not acked yet.
-                    }
                 }
             }
         }
     }
-
+    public void checkTimeOut() {
+        LocalDateTime now = LocalDateTime.now();
+        if (!timer.isRunning()) {
+            return;
+        }
+        if (timer.getExpireAt().isAfter(now)) { // timeout occured
+            ArrayList<WindowElement> copy = new ArrayList<>();
+            copy.addAll(senderBuffer.getWindow());
+            Iterator<WindowElement> iterator = copy.iterator();
+            while (iterator.hasNext()) {
+                WindowElement element = iterator.next();
+                if (element.isAcked() == true) {
+                    continue;
+                }
+                else {
+                    timer.setTimer(Math.toIntExact(element.getSequenceNumber()), now);
+                    break;
+                }
+            }
+        }
+    }
 }
