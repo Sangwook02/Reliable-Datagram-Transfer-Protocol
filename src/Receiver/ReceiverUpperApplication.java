@@ -66,23 +66,31 @@ public class ReceiverUpperApplication {
         }
     }
 
-    public void windowToApplication(Deque<Segment> segments) {
+    public void windowToApplication(ArrayList<Segment> segments, Receiver receiver) {
         // TODO: in-order인 segment를 읽고 sliding.
-        if (lastByteRead + 1 == receiverBuffer.getWindow().getFirst().getSequenceNumber()) {
-            dataLength.add(receiverBuffer.getWindow().getFirst().getLength());
-            Segment segment = receiverBuffer.getWindow().remove();
-            this.lastByteRead += segment.getLength();
+        if (receiverBuffer.getWindow() == null) {
+            return;
         }
-        System.out.println("receiverBuffer = " + receiverBuffer.getWindow());
+        if (receiverBuffer.bring() == null) {
+            return;
+        }
+        if (lastByteRead + 1 == receiverBuffer.bring().getSequenceNumber()) {
+            System.out.println("if문 안으로 진입함");
+            Segment segment = receiverBuffer.bring();
+            dataLength.add(segment.getLength());
+            this.lastByteRead += segment.getLength();
+            receiverBuffer.setRcvBase(segment.getLength());
+            return;
+        }
     }
 
-    public void read() throws InterruptedException {
+    public void read(Receiver receiver) throws InterruptedException {
         while (connection) {
             double idleTime = idleList.remove();
             idleList.offer(idleTime);
             Thread.sleep((long) idleTime);
             if (receiverBuffer.getWindow().size() != 0) {
-                windowToApplication(receiverBuffer.getWindow());
+                windowToApplication(receiverBuffer.getWindow(), receiver);
             }
         }
         System.out.println("connection = " + connection);
