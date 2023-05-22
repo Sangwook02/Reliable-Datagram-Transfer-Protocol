@@ -1,10 +1,13 @@
 package Sender;
 
+import java.time.LocalDateTime;
+
 public class WindowElement {
     private int length;
     private Long sequenceNumber;
     private boolean acked = false;
     private boolean isSegmentCreated = false;
+    private LocalDateTime timeSent;
 
     public boolean isSegmentCreated() {
         return isSegmentCreated;
@@ -41,4 +44,12 @@ public class WindowElement {
     public void setSequenceNumber(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
+    public LocalDateTime getTimeSent() {
+        return timeSent;
+    }
+
+    public void setTimeSent(LocalDateTime timeSent) {
+        this.timeSent = timeSent;
+    }
+
 }
