@@ -33,7 +33,7 @@ public class Sender {
         return instance;
     }
 
-    public boolean getData(int data) {
+    public boolean getData(int data) throws InterruptedException {
         System.out.println(data+" 크기의 데이터를 window에 삽입합니다.");
         return senderBuffer.insert(data);
     }
@@ -61,10 +61,11 @@ public class Sender {
         return "close";
     }
 
-    public void acked(Ack ack) {
+    public void acked(Ack ack) throws InterruptedException {
         this.advWindow = ack.getW();
         int y = ack.getY();
         senderBuffer.sliding(y);
+        senderBuffer.printBuffer("acked");
         if (lastByteSent > y) {
             timer.updateTimer(y, senderBuffer.getWindow());
         } else if (lastByteSent < y){
@@ -106,16 +107,18 @@ public class Sender {
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
                         channel.senderToReceiver(this, receiver, segment);
                     }
+                    senderBuffer.printBuffer("Sender sent new segment");
                 }
             }
         }
     }
-    public void checkTimeOut() {
+    public void checkTimeOut() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         if (!timer.isRunning()) {
             return;
         }
         if (timer.getExpireAt().isAfter(now)) { // timeout occured
+            senderBuffer.printBuffer("timeout occured");
             ArrayList<WindowElement> copy = new ArrayList<>();
             copy.addAll(senderBuffer.getWindow());
             Iterator<WindowElement> iterator = copy.iterator();
