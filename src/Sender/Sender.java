@@ -17,6 +17,7 @@ public class Sender {
     private Timer timer = Timer.getInstance();
     private Receiver receiver;
     private boolean isConnected = false;
+
     private static final Sender instance = new Sender();
     private SenderBuffer senderBuffer = new SenderBuffer();
     private SegmentBuilder segmentBuilder = SegmentBuilder.getInstance();
