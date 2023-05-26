@@ -14,6 +14,10 @@ public class SenderBuffer {
     private int lastByteAcked;
     private ArrayList<WindowElement> window = new ArrayList<WindowElement>();
 
+    public ArrayList<WindowElement> getWindow() {
+        return window;
+    }
+
     public SenderBuffer() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -67,26 +71,10 @@ public class SenderBuffer {
         return false;
     }
 
-    public List<WindowElement> bringUnAckedData() {
-        List<WindowElement> unwrittenData = new ArrayList<>();
-        // return List of unAcked element from buffer's window.
-        for (WindowElement element:window) {
-            if (element.isAcked() == false) {
-                unwrittenData.add(element);
-            }
-        }
-        return unwrittenData;
+    public void sliding(int y) {
+        updateAck(y);
     }
 
-    public int getSendBase() {
-        return sendBase;
-    }
-
-    public ArrayList<WindowElement> getWindow() {
-        return window;
-    }
-
-    // TODO: Ack 받았을 때의 작동, sliding 등
     public void updateAck(int y) {
         ArrayList<WindowElement> copy = new ArrayList<>();
         for (WindowElement e: window) {
@@ -102,8 +90,5 @@ public class SenderBuffer {
               break;
             }
         }
-    }
-    public void sliding(int y) {
-         updateAck(y);
     }
 }
