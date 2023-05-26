@@ -1,12 +1,10 @@
 package Packet;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.Properties;
 public class Segment {
     // checksum은 생략.
     private int srcPortNumber;
-
     private int destPortNumber;
     private int length;
     private Long sequenceNumber;
@@ -20,15 +18,11 @@ public class Segment {
         } catch (IOException e) {
             System.out.println("can not open configuration file");
         }
-
         this.srcPortNumber= Integer.parseInt(properties.getProperty("sender_port_number"));
         this.destPortNumber = Integer.parseInt(properties.getProperty("receiver_port_number"));
         this.length = dataLength;
         this.sequenceNumber = sequenceNumber;
     }
-
-
-
 
     public Long getSequenceNumber() {
         return sequenceNumber;
