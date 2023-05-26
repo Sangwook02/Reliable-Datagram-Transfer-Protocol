@@ -73,12 +73,7 @@ public class Sender {
         }
     }
     public void writeProcess() throws InterruptedException {
-        /*
-        STEP1: List<WindowElement>에서 아직 보내지지 않은, segments에 없는 element를 Segment로 만들어 segments에 추가.
-        STEP2: segments의 segment들을 하나씩 보내고 timer 가동.
-         */
-        // only when window is not null
-        if (senderBuffer.getWindow().size() != 0) {
+        if (senderBuffer.getWindow().size() != 0) { // only when window is not null
             ArrayList<WindowElement> copy = new ArrayList<>();
             for (WindowElement e: senderBuffer.getWindow()) {
                 copy.add(e);
@@ -98,8 +93,7 @@ public class Sender {
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
                         channel.senderToReceiver(this, receiver, segment);
                     }
-                    else {
-                        // timer is running but this element is never sent.
+                    else { // timer is running but this element is never sent.
                         element.setTimeSent(LocalDateTime.now());
                         this.lastByteSent += element.getLength();
                         System.out.println("lastByteSent = " + lastByteSent);
