@@ -1,7 +1,9 @@
 package Receiver;
 
+import CustomCanvas.CustomCanvas;
 import Packet.Segment;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -74,9 +76,28 @@ public class ReceiverBuffer {
     public void insert(Segment segment) {
         if (!window.contains(segment)) {
             window.add(segment);
+            printBuffer("ReceiverBuffer: Successfully inserted");
         }
         else {
             System.out.println("segment is already in window");
         }
+    }
+
+    public void printBuffer(String msg) {
+        /*
+        rcved && read RED
+        rcved && not read BLUE
+        spare space YELLOW
+         */
+        Frame receiverBufferFrame = new Frame();
+        receiverBufferFrame.setVisible(true);
+        receiverBufferFrame.setSize(1000, 500);
+        receiverBufferFrame.setBackground(Color.gray);
+        receiverBufferFrame.setTitle(msg);
+        CustomCanvas customCanvas = new CustomCanvas();
+        customCanvas.setSegments(window);
+        customCanvas.setRcvBase(rcvBase);
+        receiverBufferFrame.add(customCanvas);
+
     }
 }

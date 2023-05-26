@@ -80,6 +80,7 @@ public class ReceiverUpperApplication {
             dataLength.add(segment.getLength());
             this.lastByteRead += segment.getLength();
             receiverBuffer.setRcvBase(segment.getLength());
+            receiverBuffer.printBuffer("ReceiverUpperApplication: Successfully read segment from window");
             return;
         }
     }
