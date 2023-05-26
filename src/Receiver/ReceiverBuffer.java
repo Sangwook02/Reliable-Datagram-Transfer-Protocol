@@ -46,9 +46,7 @@ public class ReceiverBuffer {
         }
         for(Segment seg: window) {
             total += seg.getLength();
-            if (seg.getSequenceNumber() < rcvBase) {
-                continue;
-            } else if (seg.getSequenceNumber() == rcvBase) {
+            if (seg.getSequenceNumber() == rcvBase) {
                 return seg;
             }
         }
