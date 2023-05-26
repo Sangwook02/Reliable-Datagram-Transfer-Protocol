@@ -13,7 +13,6 @@ public class SenderBuffer {
     private int lastByteWritten;
     private int sendBase;
     private int lastByteAcked;
-    // TODO: Segment가 아니라 int로 바꿔야 함.
     private ArrayList<WindowElement> window = new ArrayList<WindowElement>();
 
     public SenderBuffer() {
@@ -48,9 +47,9 @@ public class SenderBuffer {
         customCanvas.setSendBase(sendBase);
         senderBufferFrame.add(customCanvas);
     }
-    // Sender side의 window에 segment 삽입
+
     public boolean insert(int data) throws InterruptedException {
-        // spare space is (sendBase+windowSize-lastByteWritten-1) bytes
+        // spare space == (sendBase+windowSize-lastByteWritten-1)
         if(sendBase+windowSize-lastByteWritten-1 >= data) {
             WindowElement element = new WindowElement(data);
             this.window.add(element);
@@ -63,7 +62,7 @@ public class SenderBuffer {
             printBuffer("SenderBuffer: Successfully inserted");
             return true;
         }
-        // 여유 공간이 부족할 경우.
+        // advWindow's size is not big enough
         printBuffer("SenderBuffer: failed to insert");
         System.out.println("failed to insert!");
         return false;
