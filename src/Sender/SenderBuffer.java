@@ -6,7 +6,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.List;
 
 public class SenderBuffer {
     private int windowSize;
