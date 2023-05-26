@@ -30,7 +30,9 @@ public class SenderBuffer {
         this.sendBase = 0;
         this.lastByteAcked = 0;
     }
+
     public void printBuffer(String msg) {
+
         /*
         sent && acked RED
         sent && not acked BLUE
