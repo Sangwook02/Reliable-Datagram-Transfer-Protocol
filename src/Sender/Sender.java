@@ -104,6 +104,7 @@ public class Sender {
             }
         }
     }
+
     public void checkTimeOut() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         if (!timer.isRunning()) {
