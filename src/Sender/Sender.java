@@ -15,10 +15,6 @@ public class Sender {
     private int nextSeqNumber = 0;
     private int lastByteSent = -1;
     private Timer timer = Timer.getInstance();
-
-    /*
-    connection Setup을 위한 receiver와 isConnected.
-     */
     private Receiver receiver;
     private boolean isConnected = false;
     private static final Sender instance = new Sender();
