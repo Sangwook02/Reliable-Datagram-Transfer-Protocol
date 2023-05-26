@@ -32,7 +32,6 @@ public class SenderBuffer {
     }
 
     public void printBuffer(String msg) {
-
         /*
         sent && acked RED
         sent && not acked BLUE
@@ -48,7 +47,6 @@ public class SenderBuffer {
         customCanvas.setWindowElements(window);
         customCanvas.setSendBase(sendBase);
         senderBufferFrame.add(customCanvas);
-
     }
     // Sender side의 window에 segment 삽입
     public boolean insert(int data) throws InterruptedException {
@@ -69,7 +67,6 @@ public class SenderBuffer {
         printBuffer("SenderBuffer: failed to insert");
         System.out.println("failed to insert!");
         return false;
-
     }
 
     public List<WindowElement> bringUnAckedData() {

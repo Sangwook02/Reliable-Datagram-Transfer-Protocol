@@ -60,5 +60,4 @@ public class Timer {
         this.isRunning = true;
         this.expireAt = timerElement.getTimeSent().plusSeconds(timeoutValue);
     }
-
 }

@@ -1,6 +1,5 @@
 package Sender;
 
-
 import Packet.Segment;
 
 public class SegmentBuilder {
