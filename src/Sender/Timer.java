@@ -11,6 +11,14 @@ public class Timer {
     private LocalDateTime expireAt;
     private int timeoutValue;
     private boolean isRunning;
+
+    public boolean isRunning() {
+        if(isRunning) {
+            return LocalDateTime.now().isAfter(expireAt);
+        }
+        return false;
+    }
+
     private static final Timer instance = new Timer();
 
     public static Timer getInstance() {
@@ -27,13 +35,6 @@ public class Timer {
             System.out.println("can not open configuration file");
         }
         this.timeoutValue = Integer.parseInt(properties.getProperty("sender_timeout_value"));
-    }
-
-    public boolean isRunning() {
-        if(isRunning) {
-            return LocalDateTime.now().isAfter(expireAt);
-        }
-        return false;
     }
 
     public void resetRunning() {
