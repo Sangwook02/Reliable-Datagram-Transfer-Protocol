@@ -61,7 +61,7 @@ public class Sender {
         return "close";
     }
 
-    public void acked(Ack ack) throws InterruptedException {
+    public void acked(Ack ack) {
         this.advWindow = ack.getW();
         int y = ack.getY();
         senderBuffer.sliding(y);
