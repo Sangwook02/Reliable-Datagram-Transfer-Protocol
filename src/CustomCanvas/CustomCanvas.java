@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class CustomCanvas extends Canvas {
     private int sendBase;
     private int rcvBase;
-    private int lastByteRead;
     private ArrayList<WindowElement> windowElements;
     private ArrayList<Segment> segments;
 
@@ -21,12 +20,7 @@ public class CustomCanvas extends Canvas {
         this.rcvBase = rcvBase;
     }
 
-    public void setLastByteRead(int lastByteRead) {
-        this.lastByteRead = lastByteRead;
-    }
-
     public void setWindowElements(ArrayList<WindowElement> windowElements) {
-
         this.windowElements = windowElements;
     }
 
