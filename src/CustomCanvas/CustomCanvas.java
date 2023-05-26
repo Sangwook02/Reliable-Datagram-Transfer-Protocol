@@ -8,11 +8,21 @@ import java.util.ArrayList;
 
 public class CustomCanvas extends Canvas {
     private int sendBase;
+    private int rcvBase;
+    private int lastByteRead;
     private ArrayList<WindowElement> windowElements;
     private ArrayList<Segment> segments;
 
     public void setSendBase(int sendBase) {
         this.sendBase = sendBase;
+    }
+
+    public void setRcvBase(int rcvBase) {
+        this.rcvBase = rcvBase;
+    }
+
+    public void setLastByteRead(int lastByteRead) {
+        this.lastByteRead = lastByteRead;
     }
 
     public void setWindowElements(ArrayList<WindowElement> windowElements) {
@@ -31,10 +41,10 @@ public class CustomCanvas extends Canvas {
             drawWindow(graphics);
         } else if (windowElements == null && segments != null) {
             // print segments
-        } else if (windowElements != null && segments != null) {
-            // print none
+            drawSegments(graphics);
         } else {
-            // return
+            System.out.println("something went wrong");
+            return;
         }
 
     }
@@ -90,5 +100,41 @@ public class CustomCanvas extends Canvas {
         g.drawLine(x,y, x-10, y+10);
         g.drawLine(x,y, x+10, y+10);
         g.drawLine(x,y, x, y+30);
+    }
+    private void drawSegments(Graphics g) {
+        int x = 40;
+        int y = 150;
+        for(Segment segment:segments) {
+            if (segment.getSequenceNumber() < rcvBase) { // RED
+                x += 30;
+                // TODO: draw method 추가
+                drawRcvedAndReadSegment(g, segment, x, y);
+            } else if (segment.getSequenceNumber() == rcvBase) {
+                drawArrow(g, x+25,310);
+                char a[] = "rcvBase".toCharArray();
+                g.drawChars(a, 0 ,a.length, x, 360);
+                x += 30;
+                // TODO: draw method 추가
+            } else if (segment.getSequenceNumber() > rcvBase){ // BLUE
+                x += 30;
+                drawRcvedAndNotReadSegment(g, segment, x, y);
+            } else {
+                System.out.println("something went wrong");
+                return;
+            }
+        }
+        // TODO: show size of spare space
+    }
+
+    public void drawRcvedAndReadSegment(Graphics graphics, Segment segment, int x, int y) {
+        graphics.setColor(Color.RED);
+        graphics.drawRect(x, y, 20, 150);
+        graphics.drawString(String.valueOf(segment.getLength()),x+3, y+75);
+    }
+
+    public void drawRcvedAndNotReadSegment(Graphics graphics, Segment segment, int x, int y) {
+        graphics.setColor(Color.BLUE);
+        graphics.drawRect(x, y, 20, 150);
+        graphics.drawString(String.valueOf(segment.getLength()),x+3, y+75);
     }
 }
