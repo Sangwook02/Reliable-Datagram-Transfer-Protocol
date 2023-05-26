@@ -12,6 +12,23 @@ public class ReceiverBuffer {
     private int windowSize;
     private int rcvBase;
     private ArrayList<Segment> window;
+
+    public int getWindowSize() {
+        return windowSize;
+    }
+
+    public int getRcvBase() {
+        return rcvBase;
+    }
+
+    public void setRcvBase(int rcvBase) {
+        this.rcvBase += rcvBase;
+    }
+
+    public ArrayList<Segment> getWindow() {
+        return window;
+    }
+
     private static final ReceiverBuffer instance= new ReceiverBuffer();
 
     public static ReceiverBuffer getInstance() {
@@ -54,23 +71,6 @@ public class ReceiverBuffer {
         return null;
     }
 
-
-    public int getWindowSize() {
-        return windowSize;
-    }
-
-    public int getRcvBase() {
-        return rcvBase;
-    }
-
-    public void setRcvBase(int rcvBase) {
-        this.rcvBase += rcvBase;
-    }
-
-    public ArrayList<Segment> getWindow() {
-        return window;
-    }
-
     public void insert(Segment segment) {
         if (!window.contains(segment)) {
             window.add(segment);
@@ -96,6 +96,5 @@ public class ReceiverBuffer {
         customCanvas.setSegments(window);
         customCanvas.setRcvBase(rcvBase);
         receiverBufferFrame.add(customCanvas);
-
     }
 }
