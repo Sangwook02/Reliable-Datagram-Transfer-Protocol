@@ -12,9 +12,11 @@ public class Receiver {
     private static final Receiver instance;
     private Channel channel;
 
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
 
     private ReceiverUpperApplication receiverUpperApplication = ReceiverUpperApplication.getInstance();
-
 
     static {
         try {
@@ -26,20 +28,13 @@ public class Receiver {
         }
     }
 
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
     public static Receiver getInstance() {
         return instance;
     }
-
+    private ReceiverBuffer receiverBuffer = ReceiverBuffer.getInstance();
     private Receiver() throws FileNotFoundException, InterruptedException {
         this.lastByteRcvd = -1;
     }
-
-    private int portNumber;
-    private ReceiverBuffer receiverBuffer = ReceiverBuffer.getInstance();
 
     public Ack handShaking(Long initialSequenceNumber) throws FileNotFoundException {
         String returnMessage = "Connection has made. Initial sequence number is " + initialSequenceNumber;
@@ -60,6 +55,7 @@ public class Receiver {
         receiverRead.start();
         return new Ack((int) (initialSequenceNumber+1), receiverBuffer.getWindowSize() - receiverBuffer.getRcvBase());
     }
+
     public boolean close() {
         System.out.println("Connection has been closed.");
         receiverUpperApplication.setConnection(false);
