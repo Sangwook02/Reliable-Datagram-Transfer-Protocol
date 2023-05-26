@@ -1,9 +1,9 @@
 package Packet;
 
 public class Ack {
-    // receiver가 기대하는 sequence number
+    // sequence Number which receiver expects
     private int y;
-    // receiver's window의 여유 공간
+    // receiver window's spare space
     private int w;
 
     public int getY() {
