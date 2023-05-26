@@ -11,7 +11,6 @@ public class Control {
     private static final Receiver receiver = Receiver.getInstance();
     private static final Channel channel = Channel.getInstance();
 
-
     public void run() throws FileNotFoundException {
         Thread senderWrite = new Thread() {
             @Override
@@ -40,7 +39,6 @@ public class Control {
         senderWrite.start();
         // setup connection and start passing the data from scenario file to window.
         String isDone = senderUpperApplication.write(receiver);
-
         /*
          isDone will be set "close" when the scenario file ends.
          Then, interrupt the thread to stop the write action and finish the program.
