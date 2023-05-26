@@ -12,9 +12,11 @@ public class Timer {
     private int timeoutValue;
     private boolean isRunning;
     private static final Timer instance = new Timer();
+
     public static Timer getInstance() {
         return instance;
     }
+
     private Timer() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -48,6 +50,7 @@ public class Timer {
         this.isRunning = true;
         this.expireAt = startAt.plusSeconds(timeoutValue);
     }
+
     public void updateTimer(int y, ArrayList<WindowElement> windowElements) {
         WindowElement timerElement = null;
         for(WindowElement element:windowElements) {

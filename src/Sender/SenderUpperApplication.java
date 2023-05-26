@@ -13,6 +13,7 @@ public class SenderUpperApplication {
     }
 
     private static final Sender sender = Sender.getInstance();
+
     public String write(Receiver receiver) throws FileNotFoundException {
         // bring scenario filePath from config.
         String resource = "config/RDTP.properties";

@@ -69,6 +69,7 @@ public class Sender {
             timer.resetRunning();
         }
     }
+
     public void writeProcess() throws InterruptedException {
         if (senderBuffer.getWindow().size() != 0) { // only when window is not null
             ArrayList<WindowElement> copy = new ArrayList<>();

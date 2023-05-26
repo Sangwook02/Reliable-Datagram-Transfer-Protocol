@@ -44,6 +44,7 @@ public class WindowElement {
     public void setSequenceNumber(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
+
     public LocalDateTime getTimeSent() {
         return timeSent;
     }
