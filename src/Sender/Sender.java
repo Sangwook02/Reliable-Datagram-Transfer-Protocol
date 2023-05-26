@@ -52,7 +52,7 @@ public class Sender {
     public Receiver getReceiver() {
         return receiver;
     }
-    public String  connectionClose() {
+    public String connectionClose() {
         boolean isConnected =  receiver.close();
         receiver = null;
         return "close";
