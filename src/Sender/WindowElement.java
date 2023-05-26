@@ -9,24 +9,8 @@ public class WindowElement {
     private boolean isSegmentCreated = false;
     private LocalDateTime timeSent;
 
-    public boolean isSegmentCreated() {
-        return isSegmentCreated;
-    }
-
-    public void setSegmentCreated(boolean segmentCreated) {
-        this.isSegmentCreated = segmentCreated;
-    }
-
-    public WindowElement(int length) {
-        this.length = length;
-    }
-
     public int getLength() {
         return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 
     public boolean isAcked() {
@@ -44,6 +28,7 @@ public class WindowElement {
     public void setSequenceNumber(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
+
     public LocalDateTime getTimeSent() {
         return timeSent;
     }
@@ -52,4 +37,7 @@ public class WindowElement {
         this.timeSent = timeSent;
     }
 
+    public WindowElement(int length) {
+        this.length = length;
+    }
 }

@@ -15,12 +15,9 @@ public class Sender {
     private int nextSeqNumber = 0;
     private int lastByteSent = -1;
     private Timer timer = Timer.getInstance();
-
-    /*
-    connection Setup을 위한 receiver와 isConnected.
-     */
     private Receiver receiver;
     private boolean isConnected = false;
+
     private static final Sender instance = new Sender();
     private SenderBuffer senderBuffer = new SenderBuffer();
     private SegmentBuilder segmentBuilder = SegmentBuilder.getInstance();
@@ -55,13 +52,13 @@ public class Sender {
     public Receiver getReceiver() {
         return receiver;
     }
-    public String  connectionClose() {
+    public String connectionClose() {
         boolean isConnected =  receiver.close();
         receiver = null;
         return "close";
     }
 
-    public void acked(Ack ack) throws InterruptedException {
+    public void acked(Ack ack) {
         this.advWindow = ack.getW();
         int y = ack.getY();
         senderBuffer.sliding(y);
@@ -72,13 +69,9 @@ public class Sender {
             timer.resetRunning();
         }
     }
+
     public void writeProcess() throws InterruptedException {
-        /*
-        STEP1: List<WindowElement>에서 아직 보내지지 않은, segments에 없는 element를 Segment로 만들어 segments에 추가.
-        STEP2: segments의 segment들을 하나씩 보내고 timer 가동.
-         */
-        // only when window is not null
-        if (senderBuffer.getWindow().size() != 0) {
+        if (senderBuffer.getWindow().size() != 0) { // only when window is not null
             ArrayList<WindowElement> copy = new ArrayList<>();
             for (WindowElement e: senderBuffer.getWindow()) {
                 copy.add(e);
@@ -98,8 +91,7 @@ public class Sender {
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
                         channel.senderToReceiver(this, receiver, segment);
                     }
-                    else {
-                        // timer is running but this element is never sent.
+                    else { // timer is running but this element is never sent.
                         element.setTimeSent(LocalDateTime.now());
                         this.lastByteSent += element.getLength();
                         System.out.println("lastByteSent = " + lastByteSent);
@@ -112,6 +104,7 @@ public class Sender {
             }
         }
     }
+
     public void checkTimeOut() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
         if (!timer.isRunning()) {

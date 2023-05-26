@@ -14,6 +14,15 @@ public class ReceiverUpperApplication {
     private List<Integer> dataLength = new ArrayList<>();
     private ReceiverBuffer receiverBuffer = ReceiverBuffer.getInstance();
     private Queue<Double> idleList = new LinkedList<>();
+
+    public void setConnection(boolean connection) {
+        this.connection = connection;
+    }
+
+    public List<Integer> getDataLength() {
+        return dataLength;
+    }
+
     private static final ReceiverUpperApplication instance;
 
     static {
@@ -31,14 +40,6 @@ public class ReceiverUpperApplication {
     }
 
     private ReceiverUpperApplication() throws FileNotFoundException, InterruptedException {
-    }
-
-    public void setConnection(boolean connection) {
-        this.connection = connection;
-    }
-
-    public List<Integer> getDataLength() {
-        return dataLength;
     }
 
     public void readScenarioFile() throws FileNotFoundException {
@@ -67,21 +68,18 @@ public class ReceiverUpperApplication {
     }
 
     public void windowToApplication(ArrayList<Segment> segments, Receiver receiver) {
-        // TODO: in-order인 segment를 읽고 sliding.
         if (receiverBuffer.getWindow() == null) {
             return;
         }
         if (receiverBuffer.bring() == null) {
             return;
         }
-        if (lastByteRead + 1 == receiverBuffer.bring().getSequenceNumber()) {
-            System.out.println("if문 안으로 진입함");
+        if (lastByteRead + 1 == receiverBuffer.bring().getSequenceNumber()) {;
             Segment segment = receiverBuffer.bring();
             dataLength.add(segment.getLength());
             this.lastByteRead += segment.getLength();
             receiverBuffer.setRcvBase(segment.getLength());
             receiverBuffer.printBuffer("ReceiverUpperApplication: Successfully read segment from window");
-            return;
         }
     }
 

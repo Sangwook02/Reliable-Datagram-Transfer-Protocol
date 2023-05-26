@@ -11,10 +11,20 @@ public class Timer {
     private LocalDateTime expireAt;
     private int timeoutValue;
     private boolean isRunning;
+
+    public boolean isRunning() {
+        if(isRunning) {
+            return LocalDateTime.now().isAfter(expireAt);
+        }
+        return false;
+    }
+
     private static final Timer instance = new Timer();
+
     public static Timer getInstance() {
         return instance;
     }
+
     private Timer() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -25,13 +35,6 @@ public class Timer {
             System.out.println("can not open configuration file");
         }
         this.timeoutValue = Integer.parseInt(properties.getProperty("sender_timeout_value"));
-    }
-
-    public boolean isRunning() {
-        if(isRunning) {
-            return LocalDateTime.now().isAfter(expireAt);
-        }
-        return false;
     }
 
     public void resetRunning() {
@@ -48,6 +51,7 @@ public class Timer {
         this.isRunning = true;
         this.expireAt = startAt.plusSeconds(timeoutValue);
     }
+
     public void updateTimer(int y, ArrayList<WindowElement> windowElements) {
         WindowElement timerElement = null;
         for(WindowElement element:windowElements) {
@@ -60,5 +64,4 @@ public class Timer {
         this.isRunning = true;
         this.expireAt = timerElement.getTimeSent().plusSeconds(timeoutValue);
     }
-
 }

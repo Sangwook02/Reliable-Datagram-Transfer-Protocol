@@ -6,15 +6,17 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.List;
 
 public class SenderBuffer {
     private int windowSize;
     private int lastByteWritten;
     private int sendBase;
     private int lastByteAcked;
-    // TODO: Segment가 아니라 int로 바꿔야 함.
     private ArrayList<WindowElement> window = new ArrayList<WindowElement>();
+
+    public ArrayList<WindowElement> getWindow() {
+        return window;
+    }
 
     public SenderBuffer() {
         String resource = "config/RDTP.properties";
@@ -32,7 +34,6 @@ public class SenderBuffer {
     }
 
     public void printBuffer(String msg) {
-
         /*
         sent && acked RED
         sent && not acked BLUE
@@ -48,11 +49,10 @@ public class SenderBuffer {
         customCanvas.setWindowElements(window);
         customCanvas.setSendBase(sendBase);
         senderBufferFrame.add(customCanvas);
-
     }
-    // Sender side의 window에 segment 삽입
+
     public boolean insert(int data) throws InterruptedException {
-        // spare space is (sendBase+windowSize-lastByteWritten-1) bytes
+        // spare space == (sendBase+windowSize-lastByteWritten-1)
         if(sendBase+windowSize-lastByteWritten-1 >= data) {
             WindowElement element = new WindowElement(data);
             this.window.add(element);
@@ -65,33 +65,16 @@ public class SenderBuffer {
             printBuffer("SenderBuffer: Successfully inserted");
             return true;
         }
-        // 여유 공간이 부족할 경우.
+        // advWindow's size is not big enough
         printBuffer("SenderBuffer: failed to insert");
         System.out.println("failed to insert!");
         return false;
-
     }
 
-    public List<WindowElement> bringUnAckedData() {
-        List<WindowElement> unwrittenData = new ArrayList<>();
-        // return List of unAcked element from buffer's window.
-        for (WindowElement element:window) {
-            if (element.isAcked() == false) {
-                unwrittenData.add(element);
-            }
-        }
-        return unwrittenData;
+    public void sliding(int y) {
+        updateAck(y);
     }
 
-    public int getSendBase() {
-        return sendBase;
-    }
-
-    public ArrayList<WindowElement> getWindow() {
-        return window;
-    }
-
-    // TODO: Ack 받았을 때의 작동, sliding 등
     public void updateAck(int y) {
         ArrayList<WindowElement> copy = new ArrayList<>();
         for (WindowElement e: window) {
@@ -107,8 +90,5 @@ public class SenderBuffer {
               break;
             }
         }
-    }
-    public void sliding(int y) {
-         updateAck(y);
     }
 }

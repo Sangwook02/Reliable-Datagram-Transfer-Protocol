@@ -12,6 +12,23 @@ public class ReceiverBuffer {
     private int windowSize;
     private int rcvBase;
     private ArrayList<Segment> window;
+
+    public int getWindowSize() {
+        return windowSize;
+    }
+
+    public int getRcvBase() {
+        return rcvBase;
+    }
+
+    public void setRcvBase(int rcvBase) {
+        this.rcvBase += rcvBase;
+    }
+
+    public ArrayList<Segment> getWindow() {
+        return window;
+    }
+
     private static final ReceiverBuffer instance= new ReceiverBuffer();
 
     public static ReceiverBuffer getInstance() {
@@ -46,31 +63,12 @@ public class ReceiverBuffer {
         }
         for(Segment seg: window) {
             total += seg.getLength();
-            if (seg.getSequenceNumber() < rcvBase) {
-                continue;
-            } else if (seg.getSequenceNumber() == rcvBase) {
+            if (seg.getSequenceNumber() == rcvBase) {
                 return seg;
             }
         }
         System.out.println("return null from bring()");
         return null;
-    }
-
-
-    public int getWindowSize() {
-        return windowSize;
-    }
-
-    public int getRcvBase() {
-        return rcvBase;
-    }
-
-    public void setRcvBase(int rcvBase) {
-        this.rcvBase += rcvBase;
-    }
-
-    public ArrayList<Segment> getWindow() {
-        return window;
     }
 
     public void insert(Segment segment) {
@@ -98,6 +96,5 @@ public class ReceiverBuffer {
         customCanvas.setSegments(window);
         customCanvas.setRcvBase(rcvBase);
         receiverBufferFrame.add(customCanvas);
-
     }
 }

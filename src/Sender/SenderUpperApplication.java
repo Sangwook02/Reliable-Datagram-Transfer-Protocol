@@ -13,6 +13,7 @@ public class SenderUpperApplication {
     }
 
     private static final Sender sender = Sender.getInstance();
+
     public String write(Receiver receiver) throws FileNotFoundException {
         // bring scenario filePath from config.
         String resource = "config/RDTP.properties";
@@ -38,10 +39,7 @@ public class SenderUpperApplication {
                 read2 *= 1000;
                 System.out.println("read22 = " + read2);
                 // Thread sleep for idle
-                System.out.print("idling for ");
-                System.out.print(read2);
-                System.out.println(" second(s)");
-                System.out.println("");
+                System.out.print("senderUpperApplication is idling");
                 Thread.sleep((long) read2);
             } catch (Exception e) {
                 System.out.println("endOfFIle");

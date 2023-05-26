@@ -37,7 +37,7 @@ public class Channel {
     private Channel() throws FileNotFoundException {
         init();
     }
-    private void init() throws FileNotFoundException {
+    private void init() {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
