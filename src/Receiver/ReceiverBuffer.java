@@ -51,7 +51,6 @@ public class ReceiverBuffer {
 
     public Segment bring() {
         if (window.size() == 0) {
-            System.out.println("return null from bring()");
             return null;
         }
         int total = 0;
@@ -67,7 +66,6 @@ public class ReceiverBuffer {
                 return seg;
             }
         }
-        System.out.println("return null from bring()");
         return null;
     }
 
