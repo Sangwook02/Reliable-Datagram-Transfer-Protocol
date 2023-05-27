@@ -1,4 +1,4 @@
-package Sender;
+package Packet;
 
 import java.time.LocalDateTime;
 
