@@ -95,6 +95,7 @@ public class ReceiverBuffer {
         CustomCanvas customCanvas = new CustomCanvas();
         customCanvas.setSegments(window);
         customCanvas.setRcvBase(rcvBase);
+        customCanvas.setReceiverWindowSize(windowSize);
         receiverBufferFrame.add(customCanvas);
     }
 }

@@ -46,6 +46,11 @@ public class SenderUpperApplication {
                 System.out.println("연결 종료합니다.");
             }
         }
+        while (true) {
+            if (senderTransport.getSenderBuffer().getWindow().get(senderTransport.getSenderBuffer().getWindow().size()-1).isAcked() == true) {
+                break;
+            }
+        }
         return senderTransport.connectionClose();
     }
 

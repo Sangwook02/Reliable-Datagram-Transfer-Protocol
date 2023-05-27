@@ -37,6 +37,10 @@ public class SenderTransport {
         return senderBuffer.insert(data);
     }
 
+    public SenderBuffer getSenderBuffer() {
+        return senderBuffer;
+    }
+
     public void connectionSetup(ReceiverTransport receiverTransport) throws FileNotFoundException {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -112,7 +116,7 @@ public class SenderTransport {
         if (!timer.isRunning()) {
             return;
         }
-        if (timer.getExpireAt().isAfter(now)) { // timeout occured
+        if (timer.getExpireAt().isBefore(now)) { // timeout occured
             senderBuffer.printBuffer("timeout occured");
             ArrayList<WindowElement> copy = new ArrayList<>();
             copy.addAll(senderBuffer.getWindow());
@@ -124,6 +128,9 @@ public class SenderTransport {
                 }
                 else {
                     timer.setTimer(Math.toIntExact(element.getSequenceNumber()), now);
+                    Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                    channel.senderToReceiver(this, receiverTransport, segment);
+                    System.out.println("sent again");
                     break;
                 }
             }

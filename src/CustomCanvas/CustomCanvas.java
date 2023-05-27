@@ -8,20 +8,30 @@ import java.util.ArrayList;
 
 public class CustomCanvas extends Canvas {
     private int sendBase;
-    private int rcvBase;
+    private int senderWindowSize;
     private ArrayList<WindowElement> windowElements;
+    private int rcvBase;
+    private int receiverWindowSize;
     private ArrayList<Segment> segments;
 
     public void setSendBase(int sendBase) {
         this.sendBase = sendBase;
     }
 
-    public void setRcvBase(int rcvBase) {
-        this.rcvBase = rcvBase;
+    public void setSenderWindowSize(int senderWindowSize) {
+        this.senderWindowSize = senderWindowSize;
     }
 
     public void setWindowElements(ArrayList<WindowElement> windowElements) {
         this.windowElements = windowElements;
+    }
+
+    public void setRcvBase(int rcvBase) {
+        this.rcvBase = rcvBase;
+    }
+
+    public void setReceiverWindowSize(int receiverWindowSize) {
+        this.receiverWindowSize = receiverWindowSize;
     }
 
     public void setSegments(ArrayList<Segment> segments) {
@@ -62,6 +72,12 @@ public class CustomCanvas extends Canvas {
                 drawSentAndAckedElement(graphics, element, x, y);
             }
         }
+        int spareSpace = senderWindowSize + sendBase;
+        for (WindowElement element:windowElements){
+            spareSpace -= element.getLength();
+        }
+        x += 30;
+        drawSpareSpace(graphics, spareSpace, x, y);
     }
 
     private void drawSentAndAckedElement(Graphics graphics, WindowElement element, int x, int y) {
@@ -93,6 +109,7 @@ public class CustomCanvas extends Canvas {
     }
 
     private void drawArrow(Graphics graphics, int x, int y) {
+        graphics.setColor(Color.BLACK);
         graphics.drawLine(x,y, x-10, y+10);
         graphics.drawLine(x,y, x+10, y+10);
         graphics.drawLine(x,y, x, y+30);
@@ -119,7 +136,12 @@ public class CustomCanvas extends Canvas {
                 return;
             }
         }
-        // TODO: show size of spare space
+        int spareSpace = receiverWindowSize + rcvBase;
+        for (Segment segment:segments){
+            spareSpace -= segment.getLength();
+        }
+        x += 30;
+        drawSpareSpace(graphics, spareSpace, x, y);
     }
 
     public void drawRcvedAndReadSegment(Graphics graphics, Segment segment, int x, int y) {
@@ -132,5 +154,12 @@ public class CustomCanvas extends Canvas {
         graphics.setColor(Color.BLUE);
         graphics.drawRect(x, y, 20, 150);
         graphics.drawString(String.valueOf(segment.getLength()),x+3, y+75);
+    }
+
+    public void drawSpareSpace(Graphics graphics,int size, int x, int y) {
+        graphics.setColor(Color.YELLOW);
+        graphics.drawRect(x,y, 100, 150);
+        graphics.drawString("not used:", x+30, y+65);
+        graphics.drawString(String.valueOf(size),x+30, y+95);
     }
 }

@@ -74,8 +74,14 @@ public class ReceiverTransport {
         }
         else {
             System.out.println("cannot receive because it is not in-order");
-            Ack ack = new Ack((int) (receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getSequenceNumber()+ receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
-            channel.receiverToSender(ack, senderTransport);
+            if (receiverBuffer.getWindow().size() == 0) {
+                Ack ack = new Ack(0, receiverBuffer.getWindowSize());
+                channel.receiverToSender(ack, senderTransport);
+            }
+            else{
+                Ack ack = new Ack((int) (receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getSequenceNumber()+ receiverBuffer.getWindow().get(receiverBuffer.getWindow().size()-1).getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
+                channel.receiverToSender(ack, senderTransport);
+            }
         }
     }
 }
