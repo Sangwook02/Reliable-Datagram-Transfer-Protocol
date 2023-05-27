@@ -9,7 +9,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Sender {
+public class SenderTransport {
 
     private int advWindow;
     private int nextSeqNumber = 0;
@@ -18,15 +18,15 @@ public class Sender {
     private ReceiverTransport receiverTransport;
     private boolean isConnected = false;
 
-    private static final Sender instance = new Sender();
+    private static final SenderTransport instance = new SenderTransport();
     private SenderBuffer senderBuffer = new SenderBuffer();
     private SegmentBuilder segmentBuilder = SegmentBuilder.getInstance();
     private Channel channel = Channel.getInstance();
 
-    private Sender() {
+    private SenderTransport() {
     }
 
-    public static Sender getInstance() {
+    public static SenderTransport getInstance() {
         return instance;
     }
 

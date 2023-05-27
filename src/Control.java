@@ -1,13 +1,13 @@
 import Channel.Channel;
 import Receiver.*;
-import Sender.Sender;
+import Sender.SenderTransport;
 import Sender.SenderUpperApplication;
 
 import java.io.FileNotFoundException;
 
 public class Control {
     private static final SenderUpperApplication senderUpperApplication = SenderUpperApplication.getInstance();
-    private static final Sender sender = Sender.getInstance();
+    private static final SenderTransport senderTransport = SenderTransport.getInstance();
     private static final ReceiverTransport receiverTransport = ReceiverTransport.getInstance();
     private static final Channel channel = Channel.getInstance();
 
@@ -17,10 +17,10 @@ public class Control {
             public void run() {
                 receiverTransport.setChannel(channel);
                 while(true){
-                    if (sender.getReceiver() != null){
+                    if (senderTransport.getReceiver() != null){
                         try {
-                            sender.checkTimeOut();
-                            sender.writeProcess();
+                            senderTransport.checkTimeOut();
+                            senderTransport.writeProcess();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
