@@ -21,6 +21,7 @@ public class Channel {
             throw new RuntimeException(e);
         }
     }
+    private int portNumber;
     private double latency;
     private double smallCongestion;
     private double bigCongestion;
@@ -48,6 +49,7 @@ public class Channel {
         } catch (IOException e) {
             System.out.println("can not open configuration file");
         }
+        this.portNumber = Integer.parseInt(properties.getProperty("channel_port_number"));
         this.latency = Double.parseDouble(properties.getProperty("channel_latency"));
         this.smallCongestion = Double.parseDouble(properties.getProperty("channel_small_congestion_delay"));
         this.bigCongestion = Double.parseDouble(properties.getProperty("channel_big_congestion_delay"));
