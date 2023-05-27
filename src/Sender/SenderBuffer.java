@@ -49,6 +49,7 @@ public class SenderBuffer {
         CustomCanvas customCanvas = new CustomCanvas();
         customCanvas.setWindowElements(window);
         customCanvas.setSendBase(sendBase);
+        customCanvas.setSenderWindowSize(windowSize);
         senderBufferFrame.add(customCanvas);
     }
 
