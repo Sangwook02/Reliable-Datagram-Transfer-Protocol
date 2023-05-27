@@ -54,6 +54,7 @@ public class Channel {
         this.smallCongestion = Double.parseDouble(properties.getProperty("channel_small_congestion_delay"));
         this.bigCongestion = Double.parseDouble(properties.getProperty("channel_big_congestion_delay"));
     }
+
     private void parse(String operationScenario) {
         int tmp = 0;
         for(char i:operationScenario.toCharArray()) {
