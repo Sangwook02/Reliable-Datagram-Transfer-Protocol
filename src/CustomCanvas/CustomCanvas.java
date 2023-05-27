@@ -56,19 +56,19 @@ public class CustomCanvas extends Canvas {
         int y = 150;
         for(WindowElement element:windowElements) {
             if (element.getSequenceNumber() == null) {
-                x += 30;
+                x += 40;
                 drawNotSentElement(graphics, element, x, y);
             } else if (element.getSequenceNumber() > sendBase) { // RED가 아닌 것
-                x += 30;
+                x += 40;
                 drawWindowElement(graphics, element, x, y);
             } else if (element.getSequenceNumber() == sendBase) {
-                drawArrow(graphics, x+25,310);
+                drawArrow(graphics, x+35,310);
                 char a[] = "sendBase".toCharArray();
                 graphics.drawChars(a, 0 ,a.length, x, 360);
-                x += 30;
+                x += 40;
                 drawWindowElement(graphics, element, x, y);
             } else {
-                x += 30;
+                x += 40;
                 drawSentAndAckedElement(graphics, element, x, y);
             }
         }
@@ -76,33 +76,33 @@ public class CustomCanvas extends Canvas {
         for (WindowElement element:windowElements){
             spareSpace -= element.getLength();
         }
-        x += 30;
+        x += 40;
         drawSpareSpace(graphics, spareSpace, x, y);
     }
 
     private void drawSentAndAckedElement(Graphics graphics, WindowElement element, int x, int y) {
         graphics.setColor(Color.RED);
-        graphics.drawRect(x, y, 20, 150);
+        graphics.drawRect(x, y, 30, 150);
         graphics.drawString(element.getSequenceNumber().toString(),x+3, y+50);
         graphics.drawString(String.valueOf(element.getLength()),x+3, y+100);
     }
 
     private void drawNotSentElement(Graphics graphics, WindowElement element, int x, int y) {
         graphics.setColor(Color.GREEN);
-        graphics.drawRect(x, y, 20, 150);
+        graphics.drawRect(x, y, 30, 150);
         graphics.drawString(String.valueOf(element.getLength()),x+3, y+100);
     }
 
     private void drawWindowElement(Graphics graphics, WindowElement element, int x, int y) {
         if (element.getTimeSent() == null) {
             graphics.setColor(Color.GREEN);
-            graphics.drawRect(x, y, 20, 150);
+            graphics.drawRect(x, y, 30, 150);
             graphics.drawString(element.getSequenceNumber().toString(),x+3, y+50);
             graphics.drawString(String.valueOf(element.getLength()),x+3, y+100);
         }
         else {
             graphics.setColor(Color.BLUE);
-            graphics.drawRect(x, y, 20, 150);
+            graphics.drawRect(x, y, 30, 150);
             graphics.drawString(element.getSequenceNumber().toString(),x+3, y+50);
             graphics.drawString(String.valueOf(element.getLength()),x+3, y+100);
         }
@@ -120,16 +120,16 @@ public class CustomCanvas extends Canvas {
         int y = 150;
         for(Segment segment:segments) {
             if (segment.getSequenceNumber() < rcvBase) { // RED
-                x += 30;
+                x += 40;
                 drawRcvedAndReadSegment(graphics, segment, x, y);
             } else if (segment.getSequenceNumber() == rcvBase) {
-                drawArrow(graphics, x+25,310);
+                drawArrow(graphics, x+35,310);
                 char a[] = "rcvBase".toCharArray();
                 graphics.drawChars(a, 0 ,a.length, x, 360);
-                x += 30;
+                x += 40;
                 drawRcvedAndNotReadSegment(graphics, segment, x, y);
             } else if (segment.getSequenceNumber() > rcvBase){ // BLUE
-                x += 30;
+                x += 40;
                 drawRcvedAndNotReadSegment(graphics, segment, x, y);
             } else {
                 System.out.println("something went wrong");
@@ -140,19 +140,19 @@ public class CustomCanvas extends Canvas {
         for (Segment segment:segments){
             spareSpace -= segment.getLength();
         }
-        x += 30;
+        x += 40;
         drawSpareSpace(graphics, spareSpace, x, y);
     }
 
     public void drawRcvedAndReadSegment(Graphics graphics, Segment segment, int x, int y) {
         graphics.setColor(Color.RED);
-        graphics.drawRect(x, y, 20, 150);
+        graphics.drawRect(x, y, 30, 150);
         graphics.drawString(String.valueOf(segment.getLength()),x+3, y+75);
     }
 
     public void drawRcvedAndNotReadSegment(Graphics graphics, Segment segment, int x, int y) {
         graphics.setColor(Color.BLUE);
-        graphics.drawRect(x, y, 20, 150);
+        graphics.drawRect(x, y, 30, 150);
         graphics.drawString(String.valueOf(segment.getLength()),x+3, y+75);
     }
 
