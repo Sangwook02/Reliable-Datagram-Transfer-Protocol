@@ -1,6 +1,7 @@
 package Sender;
 
 import Channel.Channel;
+import Receiver.ReceiverMachine;
 import Receiver.ReceiverTransport;
 
 import java.io.FileNotFoundException;
@@ -22,7 +23,7 @@ public class SenderMachine {
     private SenderMachine() {
     }
 
-    public void write(ReceiverTransport receiverTransport) throws FileNotFoundException {
+    public void write(ReceiverMachine receiver) throws FileNotFoundException {
         Thread senderWrite = new Thread(() -> {
             while(true){
                 if (senderTransport.getReceiver() != null){
@@ -45,7 +46,7 @@ public class SenderMachine {
         // start to periodically write data in window.
         senderWrite.start();
         // setup connection and start passing the data from scenario file to window.
-        String isDone = senderUpperApplication.write(receiverTransport);
+        String isDone = senderUpperApplication.write(receiver.getReceiverTransport());
         /*
          isDone will be set "close" when the scenario file ends.
          Then, interrupt the thread to stop the write action and finish the program.
