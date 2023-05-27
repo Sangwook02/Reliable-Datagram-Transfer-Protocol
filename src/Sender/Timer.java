@@ -1,5 +1,7 @@
 package Sender;
 
+import Packet.WindowElement;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;

@@ -4,6 +4,7 @@ import Channel.Channel;
 import Packet.Ack;
 import Packet.Segment;
 import Packet.SegmentBuilder;
+import Packet.WindowElement;
 import Receiver.ReceiverTransport;
 
 import java.io.*;

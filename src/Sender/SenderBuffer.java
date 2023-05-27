@@ -1,6 +1,7 @@
 package Sender;
 
 import CustomCanvas.CustomCanvas;
+import Packet.WindowElement;
 
 import java.awt.*;
 import java.io.IOException;
