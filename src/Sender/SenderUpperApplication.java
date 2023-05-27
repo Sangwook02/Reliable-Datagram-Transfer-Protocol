@@ -1,6 +1,6 @@
 package Sender;
 
-import Receiver.Receiver;
+import Receiver.ReceiverTransport;
 
 import java.io.*;
 import java.util.*;
@@ -14,7 +14,7 @@ public class SenderUpperApplication {
 
     private static final Sender sender = Sender.getInstance();
 
-    public String write(Receiver receiver) throws FileNotFoundException {
+    public String write(ReceiverTransport receiverTransport) throws FileNotFoundException {
         // bring scenario filePath from config.
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -25,7 +25,7 @@ public class SenderUpperApplication {
             System.out.println("can not open configuration file");
         }
         // connection Setup
-        sender.connectionSetup(receiver);
+        sender.connectionSetup(receiverTransport);
         // read scenario file
         Scanner scanner = new Scanner(new File(properties.getProperty("sender_scenario_file")));
         // execute scenario file

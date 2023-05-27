@@ -7,9 +7,9 @@ import Sender.Sender;
 
 import java.io.FileNotFoundException;
 
-public class Receiver {
+public class ReceiverTransport {
     private int lastByteRcvd;
-    private static final Receiver instance;
+    private static final ReceiverTransport instance;
     private Channel channel;
 
     public void setChannel(Channel channel) {
@@ -20,7 +20,7 @@ public class Receiver {
 
     static {
         try {
-            instance = new Receiver();
+            instance = new ReceiverTransport();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -28,11 +28,12 @@ public class Receiver {
         }
     }
 
-    public static Receiver getInstance() {
+
+    public static ReceiverTransport getInstance() {
         return instance;
     }
     private ReceiverBuffer receiverBuffer = ReceiverBuffer.getInstance();
-    private Receiver() throws FileNotFoundException, InterruptedException {
+    private ReceiverTransport() throws FileNotFoundException, InterruptedException {
         this.lastByteRcvd = -1;
     }
 
@@ -46,7 +47,7 @@ public class Receiver {
             @Override
             public void run() {
                 try {
-                    receiverUpperApplication.read(Receiver.this);
+                    receiverUpperApplication.read(ReceiverTransport.this);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
