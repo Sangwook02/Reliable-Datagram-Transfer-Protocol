@@ -1,6 +1,4 @@
-package Sender;
-
-import Packet.Segment;
+package Packet;
 
 public class SegmentBuilder {
     private static final SegmentBuilder instance = new SegmentBuilder();
