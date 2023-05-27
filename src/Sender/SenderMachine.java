@@ -5,8 +5,12 @@ import Receiver.ReceiverMachine;
 import Receiver.ReceiverTransport;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class SenderMachine {
+    private String ipAddress;
     private SenderUpperApplication senderUpperApplication = SenderUpperApplication.getInstance();
     private SenderTransport senderTransport = SenderTransport.getInstance();
     private Channel channel;
@@ -21,6 +25,15 @@ public class SenderMachine {
     }
 
     private SenderMachine() {
+        String resource = "config/RDTP.properties";
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            System.out.println("can not open configuration file");
+        }
+        this.ipAddress = properties.getProperty("sender_ip_addr");
     }
 
     public void write(ReceiverMachine receiver) throws FileNotFoundException {
