@@ -3,6 +3,7 @@ package Sender;
 import Channel.Channel;
 import Packet.Ack;
 import Packet.Segment;
+import Packet.SegmentBuilder;
 import Receiver.ReceiverTransport;
 
 import java.io.*;
