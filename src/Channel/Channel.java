@@ -94,16 +94,20 @@ public class Channel {
         getOperation();
         if (operation == 'N') {
             System.out.println("NoError");
+            System.out.println("");
             Thread.sleep((long) (latency*1000));
             receiverTransport.receive(senderTransport, segment);
         } else if (operation == 'L') {
             System.out.println("Loss");
+            System.out.println("");
         } else if (operation == 'c') {
             System.out.println("smallCongestion");
+            System.out.println("");
             Thread.sleep((long) (latency*1000 + smallCongestion*1000));
             receiverTransport.receive(senderTransport, segment);
         } else if (operation == 'C') {
             System.out.println("bigCongestion");
+            System.out.println("");
             Thread.sleep((long) (latency*1000 + bigCongestion*1000));
             receiverTransport.receive(senderTransport, segment);
         } else {
@@ -114,16 +118,20 @@ public class Channel {
         getOperation();
         if (operation == 'N') {
             System.out.println("NoError");
+            System.out.println("");
             Thread.sleep((long) (latency*1000));
             senderTransport.acked(ack);
         } else if (operation == 'L') {
             System.out.println("Loss");
+            System.out.println("");
         } else if (operation == 'c') {
             System.out.println("smallCongestion");
+            System.out.println("");
             Thread.sleep((long) (latency*1000 + smallCongestion*1000));
             senderTransport.acked(ack);
         } else if (operation == 'C') {
             System.out.println("bigCongestion");
+            System.out.println("");
             Thread.sleep((long) (latency*1000 + bigCongestion*1000));
             senderTransport.acked(ack);
         } else {
@@ -142,7 +150,6 @@ public class Channel {
         }
         else {
             this.operationCount -= 1;
-            System.out.println("decrease operationCount");
         }
     }
 }

@@ -65,7 +65,6 @@ public class ReceiverTransport {
     }
 
     public void receive(SenderTransport senderTransport, Segment segment) throws InterruptedException {
-        System.out.println("receiverBuffer.getWindow() = " + receiverBuffer.getWindow());
         if (lastByteRcvd + 1 == segment.getSequenceNumber()) {
             this.lastByteRcvd += segment.getLength();
             receiverBuffer.insert(segment);

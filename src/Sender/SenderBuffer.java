@@ -61,7 +61,6 @@ public class SenderBuffer {
             this.lastByteWritten += data;
             System.out.print("window에 삽입한 후의 여유 공간은 ");
             System.out.println(sendBase+windowSize-lastByteWritten-1);
-            System.out.println("lastByteWritten = " + lastByteWritten);
             System.out.println("successfully inserted!");
             System.out.println("");
             printBuffer("SenderBuffer: Successfully inserted");

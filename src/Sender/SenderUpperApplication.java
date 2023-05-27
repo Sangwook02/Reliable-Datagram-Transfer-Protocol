@@ -37,9 +37,9 @@ public class SenderUpperApplication {
                 }
                 double read2 = Double.parseDouble(scanner.next());
                 read2 *= 1000;
-                System.out.println("read22 = " + read2);
                 // Thread sleep for idle
-                System.out.print("senderUpperApplication is idling");
+                System.out.println("senderUpperApplication is idling");
+                System.out.println("");
                 Thread.sleep((long) read2);
             } catch (Exception e) {
                 System.out.println("endOfFIle");

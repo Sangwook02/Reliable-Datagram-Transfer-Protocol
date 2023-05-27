@@ -100,7 +100,6 @@ public class SenderTransport {
                     else { // timer is running but this element is never sent.
                         element.setTimeSent(LocalDateTime.now());
                         this.lastByteSent += element.getLength();
-                        System.out.println("lastByteSent = " + lastByteSent);
                         this.advWindow -= element.getLength();
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
                         channel.senderToReceiver(this, receiverTransport, segment);
