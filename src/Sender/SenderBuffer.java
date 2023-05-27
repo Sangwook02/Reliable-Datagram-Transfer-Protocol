@@ -86,8 +86,11 @@ public class SenderBuffer {
         while(iterator.hasNext()) {
             WindowElement element = iterator.next();
             if (element.getSequenceNumber() != null && element.getSequenceNumber() < y) {
-                element.setAcked(true);
-                sendBase += element.getLength();
+                if (!element.isAcked()) {
+                    element.setAcked(true);
+                    sendBase += element.getLength();
+                }
+
             } else {
               break;
             }
