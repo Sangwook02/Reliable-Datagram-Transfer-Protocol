@@ -92,9 +92,6 @@ public class Channel {
 
         // get operation to execute
         getOperation();
-
-        System.out.println(operation);
-        System.out.println(operationCount);
         if (operation == 'N') {
             System.out.println("NoError");
             Thread.sleep((long) (latency*1000));
