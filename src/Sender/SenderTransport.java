@@ -3,30 +3,30 @@ package Sender;
 import Channel.Channel;
 import Packet.Ack;
 import Packet.Segment;
-import Receiver.Receiver;
+import Receiver.ReceiverTransport;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Sender {
+public class SenderTransport {
 
     private int advWindow;
     private int nextSeqNumber = 0;
     private int lastByteSent = -1;
     private Timer timer = Timer.getInstance();
-    private Receiver receiver;
+    private ReceiverTransport receiverTransport;
     private boolean isConnected = false;
 
-    private static final Sender instance = new Sender();
+    private static final SenderTransport instance = new SenderTransport();
     private SenderBuffer senderBuffer = new SenderBuffer();
     private SegmentBuilder segmentBuilder = SegmentBuilder.getInstance();
     private Channel channel = Channel.getInstance();
 
-    private Sender() {
+    private SenderTransport() {
     }
 
-    public static Sender getInstance() {
+    public static SenderTransport getInstance() {
         return instance;
     }
 
@@ -35,7 +35,7 @@ public class Sender {
         return senderBuffer.insert(data);
     }
 
-    public void connectionSetup(Receiver receiver) throws FileNotFoundException {
+    public void connectionSetup(ReceiverTransport receiverTransport) throws FileNotFoundException {
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
@@ -44,17 +44,17 @@ public class Sender {
         } catch (IOException e) {
             System.out.println("can not open configuration file");
         }
-        this.advWindow = receiver.handShaking(Long.valueOf(properties.getProperty("sender_init_seq_no"))).getW();
+        this.advWindow = receiverTransport.handShaking(Long.valueOf(properties.getProperty("sender_init_seq_no"))).getW();
         this.isConnected = true;
-        this.receiver = receiver;
+        this.receiverTransport = receiverTransport;
     }
 
-    public Receiver getReceiver() {
-        return receiver;
+    public ReceiverTransport getReceiver() {
+        return receiverTransport;
     }
     public String connectionClose() {
-        boolean isConnected =  receiver.close();
-        receiver = null;
+        boolean isConnected =  receiverTransport.close();
+        receiverTransport = null;
         return "close";
     }
 
@@ -89,7 +89,7 @@ public class Sender {
                         this.lastByteSent += element.getLength();
                         this.advWindow -= element.getLength();
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
-                        channel.senderToReceiver(this, receiver, segment);
+                        channel.senderToReceiver(this, receiverTransport, segment);
                     }
                     else { // timer is running but this element is never sent.
                         element.setTimeSent(LocalDateTime.now());
@@ -97,7 +97,7 @@ public class Sender {
                         System.out.println("lastByteSent = " + lastByteSent);
                         this.advWindow -= element.getLength();
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
-                        channel.senderToReceiver(this, receiver, segment);
+                        channel.senderToReceiver(this, receiverTransport, segment);
                     }
                     senderBuffer.printBuffer("Sender sent new segment");
                 }

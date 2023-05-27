@@ -67,7 +67,7 @@ public class ReceiverUpperApplication {
         }
     }
 
-    public void windowToApplication(ArrayList<Segment> segments, Receiver receiver) {
+    public void windowToApplication(ArrayList<Segment> segments, ReceiverTransport receiverTransport) {
         if (receiverBuffer.getWindow() == null) {
             return;
         }
@@ -83,14 +83,14 @@ public class ReceiverUpperApplication {
         }
     }
 
-    public void read(Receiver receiver) throws InterruptedException {
+    public void read(ReceiverTransport receiverTransport) throws InterruptedException {
         while (connection) {
             double idleTime = idleList.remove();
             idleList.offer(idleTime);
             idleTime *= 1000;
             Thread.sleep((long) idleTime);
             if (receiverBuffer.getWindow().size() != 0) {
-                windowToApplication(receiverBuffer.getWindow(), receiver);
+                windowToApplication(receiverBuffer.getWindow(), receiverTransport);
             }
         }
         System.out.println("connection = " + connection);

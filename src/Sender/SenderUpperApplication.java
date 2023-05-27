@@ -1,6 +1,6 @@
 package Sender;
 
-import Receiver.Receiver;
+import Receiver.ReceiverTransport;
 
 import java.io.*;
 import java.util.*;
@@ -12,9 +12,9 @@ public class SenderUpperApplication {
         return instance;
     }
 
-    private static final Sender sender = Sender.getInstance();
+    private static final SenderTransport senderTransport = SenderTransport.getInstance();
 
-    public String write(Receiver receiver) throws FileNotFoundException {
+    public String write(ReceiverTransport receiverTransport) throws FileNotFoundException {
         // bring scenario filePath from config.
         String resource = "config/RDTP.properties";
         Properties properties = new Properties();
@@ -25,14 +25,14 @@ public class SenderUpperApplication {
             System.out.println("can not open configuration file");
         }
         // connection Setup
-        sender.connectionSetup(receiver);
+        senderTransport.connectionSetup(receiverTransport);
         // read scenario file
         Scanner scanner = new Scanner(new File(properties.getProperty("sender_scenario_file")));
         // execute scenario file
         while (scanner.hasNext()) {
             try {
                 int read1 = Integer.parseInt(scanner.next());
-                while (!sender.getData(read1)){
+                while (!senderTransport.getData(read1)){
                     System.out.println("sender window does not have enough space");
                 }
                 double read2 = Double.parseDouble(scanner.next());
@@ -46,7 +46,7 @@ public class SenderUpperApplication {
                 System.out.println("연결 종료합니다.");
             }
         }
-        return sender.connectionClose();
+        return senderTransport.connectionClose();
     }
 
     private SenderUpperApplication() {
