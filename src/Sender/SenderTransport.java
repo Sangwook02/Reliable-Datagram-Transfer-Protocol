@@ -80,12 +80,14 @@ public class SenderTransport {
         if (senderBuffer.getWindow().size() != 0) { // only when window is not null
             ArrayList<WindowElement> copy = new ArrayList<>();
             for (WindowElement e: senderBuffer.getWindow()) {
-                copy.add(e);
+                if (e.getSequenceNumber() == null) {
+                    copy.add(e);
+                }
             }
             Iterator<WindowElement> iterator = copy.iterator();
             while (iterator.hasNext()){
                 WindowElement element = iterator.next();
-                if (element.getSequenceNumber() == null) {
+                if (element.getSequenceNumber() == null && advWindow >= element.getLength()) {
                     element.setSequenceNumber((long) nextSeqNumber);
                     nextSeqNumber += element.getLength();
                     if (!timer.isRunning()) {
