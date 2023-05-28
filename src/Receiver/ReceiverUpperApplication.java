@@ -35,6 +35,10 @@ public class ReceiverUpperApplication {
         }
     }
 
+    public int getLastByteRead() {
+        return lastByteRead;
+    }
+
     public static ReceiverUpperApplication getInstance() {
         return instance;
     }
@@ -67,7 +71,7 @@ public class ReceiverUpperApplication {
         }
     }
 
-    public void windowToApplication(ArrayList<Segment> segments, ReceiverTransport receiverTransport) {
+    public void windowToApplication(ArrayList<Segment> segments, ReceiverTransport receiverTransport, int lastByteRead) {
         if (receiverBuffer.getWindow() == null) {
             return;
         }
@@ -79,7 +83,7 @@ public class ReceiverUpperApplication {
             dataLength.add(segment.getLength());
             this.lastByteRead += segment.getLength();
             receiverBuffer.setRcvBase(segment.getLength());
-            receiverBuffer.printBuffer("ReceiverUpperApplication: Successfully read segment from window");
+            receiverBuffer.printBuffer("ReceiverUpperApplication: Successfully read segment from window", receiverTransport.getLastByteRcvd(), lastByteRead);
         }
     }
 
@@ -90,7 +94,7 @@ public class ReceiverUpperApplication {
             idleTime *= 1000;
             Thread.sleep((long) idleTime);
             if (receiverBuffer.getWindow().size() != 0) {
-                windowToApplication(receiverBuffer.getWindow(), receiverTransport);
+                windowToApplication(receiverBuffer.getWindow(), receiverTransport, lastByteRead);
             }
         }
         System.out.println("connection = " + connection);
