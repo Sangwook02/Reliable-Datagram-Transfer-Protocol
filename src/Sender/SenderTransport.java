@@ -107,6 +107,8 @@ public class SenderTransport {
                         channel.senderToReceiver(this, receiverTransport, segment);
                     }
                     senderBuffer.printBuffer("Sender sent new segment");
+                } else if(advWindow < element.getLength()) {
+                    return;
                 }
             }
         }
