@@ -31,10 +31,10 @@ public class SenderBuffer {
         this.windowSize = Integer.parseInt(properties.getProperty("sender_window_size"));
         this.lastByteWritten = -1;
         this.sendBase = 0;
-        this.lastByteAcked = 0;
+        this.lastByteAcked =  -1;
     }
 
-    public void printBuffer(String msg) {
+    public void printBuffer(String msg, int lastByteSent) {
         /*
         sent && acked RED
         sent && not acked BLUE
@@ -51,9 +51,14 @@ public class SenderBuffer {
         customCanvas.setSendBase(sendBase);
         customCanvas.setSenderWindowSize(windowSize);
         senderBufferFrame.add(customCanvas);
+        System.out.println("=====sender window info=====");
+        System.out.println("lastByteAcked = " + lastByteAcked);
+        System.out.println("lastByteSent = " + lastByteSent);
+        System.out.println("lastByteWritten = " + lastByteWritten);
+        System.out.println("============================");
     }
 
-    public boolean insert(int data) throws InterruptedException {
+    public boolean insert(int data, int lastByteSent) throws InterruptedException {
         // spare space == (sendBase+windowSize-lastByteWritten-1)
         if(sendBase+windowSize-lastByteWritten-1 >= data) {
             WindowElement element = new WindowElement(data);
@@ -63,11 +68,11 @@ public class SenderBuffer {
             System.out.println(sendBase+windowSize-lastByteWritten-1);
             System.out.println("successfully inserted!");
             System.out.println("");
-            printBuffer("SenderBuffer: Successfully inserted");
+            printBuffer("SenderBuffer: Successfully inserted", lastByteSent);
             return true;
         }
         // advWindow's size is not big enough
-        printBuffer("SenderBuffer: failed to insert");
+        printBuffer("SenderBuffer: failed to insert", lastByteSent);
         System.out.println("failed to insert!");
         return false;
     }
@@ -77,6 +82,9 @@ public class SenderBuffer {
     }
 
     public void updateAck(int y) {
+        if (lastByteAcked + 1 != y) {
+            lastByteAcked= y-1;
+        }
         ArrayList<WindowElement> copy = new ArrayList<>();
         for (WindowElement e: window) {
             copy.add(e);

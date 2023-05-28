@@ -34,7 +34,7 @@ public class SenderTransport {
 
     public boolean getData(int data) throws InterruptedException {
         System.out.println(data+" 크기의 데이터를 window에 삽입합니다.");
-        return senderBuffer.insert(data);
+        return senderBuffer.insert(data, lastByteSent);
     }
 
     public SenderBuffer getSenderBuffer() {
@@ -68,7 +68,7 @@ public class SenderTransport {
         this.advWindow = ack.getW();
         int y = ack.getY();
         senderBuffer.sliding(y);
-        senderBuffer.printBuffer("acked");
+        senderBuffer.printBuffer("acked", lastByteSent);
         if (lastByteSent > y) {
             timer.updateTimer(y, senderBuffer.getWindow());
         } else if (lastByteSent < y){
@@ -97,6 +97,7 @@ public class SenderTransport {
                         this.lastByteSent += element.getLength();
                         this.advWindow -= element.getLength();
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                        System.out.println("data sent now = " + now);
                         channel.senderToReceiver(this, receiverTransport, segment);
                     }
                     else { // timer is running but this element is never sent.
@@ -104,9 +105,11 @@ public class SenderTransport {
                         this.lastByteSent += element.getLength();
                         this.advWindow -= element.getLength();
                         Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                        LocalDateTime now = LocalDateTime.now();
+                        System.out.println("data sent now = " + now);
                         channel.senderToReceiver(this, receiverTransport, segment);
                     }
-                    senderBuffer.printBuffer("Sender sent new segment");
+                    senderBuffer.printBuffer("Sender sent new segment", lastByteSent);
                 } else if(advWindow < element.getLength()) {
                     return;
                 }
@@ -120,7 +123,7 @@ public class SenderTransport {
             return;
         }
         if (timer.getExpireAt().isBefore(now)) { // timeout occured
-            senderBuffer.printBuffer("timeout occured");
+            senderBuffer.printBuffer("timeout occured", lastByteSent);
             ArrayList<WindowElement> copy = new ArrayList<>();
             copy.addAll(senderBuffer.getWindow());
             Iterator<WindowElement> iterator = copy.iterator();
@@ -132,6 +135,7 @@ public class SenderTransport {
                 else {
                     timer.setTimer(Math.toIntExact(element.getSequenceNumber()), now);
                     Segment segment = segmentBuilder.makeSegment(element.getLength(), element.getSequenceNumber());
+                    System.out.println("data sent now = " + now);
                     channel.senderToReceiver(this, receiverTransport, segment);
                     System.out.println("sent again");
                     break;

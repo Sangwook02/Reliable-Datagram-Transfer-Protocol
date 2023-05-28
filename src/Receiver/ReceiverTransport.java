@@ -28,6 +28,9 @@ public class ReceiverTransport {
         }
     }
 
+    public int getLastByteRcvd() {
+        return lastByteRcvd;
+    }
 
     public static ReceiverTransport getInstance() {
         return instance;
@@ -67,7 +70,7 @@ public class ReceiverTransport {
     public void receive(SenderTransport senderTransport, Segment segment) throws InterruptedException {
         if (lastByteRcvd + 1 == segment.getSequenceNumber()) {
             this.lastByteRcvd += segment.getLength();
-            receiverBuffer.insert(segment);
+            receiverBuffer.insert(segment, lastByteRcvd, receiverUpperApplication.getLastByteRead());
             Ack ack = new Ack((int) (segment.getSequenceNumber()+segment.getLength()), receiverBuffer.getRcvBase()+ receiverBuffer.getWindowSize()-lastByteRcvd-1);
             channel.receiverToSender(ack, senderTransport);
         }
