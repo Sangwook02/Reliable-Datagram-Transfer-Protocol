@@ -6,7 +6,6 @@ public class WindowElement {
     private int length;
     private Long sequenceNumber;
     private boolean acked = false;
-    private boolean isSegmentCreated = false;
     private LocalDateTime timeSent;
 
     public int getLength() {

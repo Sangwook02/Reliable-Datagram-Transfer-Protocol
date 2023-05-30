@@ -69,17 +69,17 @@ public class ReceiverBuffer {
         return null;
     }
 
-    public void insert(Segment segment) {
+    public void insert(Segment segment, int lastByteRcvd, int lastByteRead) {
         if (!window.contains(segment)) {
             window.add(segment);
-            printBuffer("ReceiverBuffer: Successfully inserted");
+            printBuffer("ReceiverBuffer: Successfully inserted", lastByteRcvd, lastByteRead);
         }
         else {
             System.out.println("segment is already in window");
         }
     }
 
-    public void printBuffer(String msg) {
+    public void printBuffer(String msg, int lastByteRcvd, int lastByteRead) {
         /*
         rcved && read RED
         rcved && not read BLUE
@@ -95,5 +95,9 @@ public class ReceiverBuffer {
         customCanvas.setRcvBase(rcvBase);
         customCanvas.setReceiverWindowSize(windowSize);
         receiverBufferFrame.add(customCanvas);
+        System.out.println("=====receiver window info=====");
+        System.out.println("lastByteRcvd = " + lastByteRcvd);
+        System.out.println("lastByteRead = " + lastByteRead);
+        System.out.println("==============================");
     }
 }
